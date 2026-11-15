@@ -787,21 +787,25 @@ function pickHint() {
 
 /* ---------- voice and sounds ---------- */
 const synth = window.speechSynthesis;
-let voice = null;
+/* A real child's voice where the device has one; otherwise a bright voice, pitched up. */
+const KID = /\bana\b/i;
+const BRIGHT = [/samantha/i, /google us english/i, /jenny/i, /aria/i, /\bava\b/i, /zira/i, /female/i];
+let voice = null, kidVoice = false;
 function pickVoice() {
   const en = (synth.getVoices() || []).filter(v => /^en[-_]/i.test(v.lang));
   const us = en.filter(v => /^en[-_]US/i.test(v.lang));
-  voice = us.find(v => /samantha|google us|jenny|aria|zira|ava/i.test(v.name)) || us[0] ||
+  voice = us.find(v => KID.test(v.name)) || BRIGHT.map(re => us.find(v => re.test(v.name))).find(Boolean) || us[0] ||
           en.find(v => /^en[-_]GB/i.test(v.lang)) || en[0] || null;
+  kidVoice = !!voice && KID.test(voice.name);
 }
 if (synth) { pickVoice(); synth.addEventListener?.('voiceschanged', pickVoice); } else $('note').hidden = false;
 
-function say(what) {
+function say(what, cheer = true) {
   if (!synth || !what) return;
-  const u = new SpeechSynthesisUtterance(what);
+  const u = new SpeechSynthesisUtterance(cheer ? what + '!' : what);   // "dog!" is read with more joy than "dog"
   u.lang = voice ? voice.lang : 'en-US';
   if (voice) u.voice = voice;
-  u.rate = 0.82; u.pitch = 1.05;
+  u.rate = 0.92; u.pitch = kidVoice ? 1.25 : 1.55;
   if (synth.speaking || synth.pending) { synth.cancel(); setTimeout(() => synth.speak(u), 90); }
   else synth.speak(u);
 }
@@ -1097,7 +1101,7 @@ document.addEventListener('keydown', e => {
 
 function speakLine() {
   const w = text();
-  if (w) say(DICT.get(w)?.say || w);
+  if (w) say(DICT.get(w)?.say || w, DICT.has(w));
 }
 $('btnSay').addEventListener('click', speakLine);
 $('btnBack').addEventListener('click', () => letters.length && removeLetter(letters[letters.length - 1].id));
