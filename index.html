@@ -789,7 +789,8 @@ function pickHint() {
 const synth = window.speechSynthesis;
 /* A real child's voice where the device has one; otherwise a bright voice, pitched up. */
 const KID = /\bana\b/i;
-const BRIGHT = [/samantha/i, /google us english/i, /jenny/i, /aria/i, /\bava\b/i, /zira/i, /female/i];
+const BRIGHT = [/aria.*natural/i, /jenny.*natural/i, /\bava\b.*(premium|enhanced)/i, /samantha/i, /google us english/i,
+  /jenny/i, /aria/i, /\bava\b/i, /zira/i, /female/i];   // the most expressive voices first
 let voice = null, kidVoice = false;
 function pickVoice() {
   const en = (synth.getVoices() || []).filter(v => /^en[-_]/i.test(v.lang));
@@ -805,7 +806,7 @@ function say(what, cheer = true) {
   const u = new SpeechSynthesisUtterance(cheer ? what + '!' : what);   // "dog!" is read with more joy than "dog"
   u.lang = voice ? voice.lang : 'en-US';
   if (voice) u.voice = voice;
-  u.rate = 0.75; u.pitch = kidVoice ? 1.05 : 1.2;
+  u.rate = 0.66; u.pitch = kidVoice ? 1.15 : 1.35;
   if (synth.speaking || synth.pending) { synth.cancel(); setTimeout(() => synth.speak(u), 90); }
   else synth.speak(u);
 }
