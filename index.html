@@ -1,0 +1,1119 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root { color-scheme: light; padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px); box-sizing: border-box; }
+body { margin: 0; font: 14px system-ui, sans-serif; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<title>בונים מילים</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@500;800&family=Playpen+Sans+Hebrew:wght@400;600;800&display=swap">
+<style>
+/* Layout: one screen, top to bottom — sticker album, picture stage, handwriting line, buttons, letter sheet. */
+:root {
+  --bg: #f3f7fc;            /* notebook page */
+  --rule: #dbe6f3;          /* faint page rules */
+  --surface: #ffffff;       /* the writing strip, buttons */
+  --line: #9bbbe4;          /* handwriting guides */
+  --base: #e8707c;          /* the baseline letters sit on */
+  --ink: #1b2440;
+  --ink-soft: #5a6685;
+  --accent: #3457d5;
+  --on-accent: #ffffff;
+  --sticker: #ffffff;       /* white edge around every letter sticker */
+  --shadow: rgb(22 34 70 / .26);
+  --font-letters: "Playpen Sans", "Comic Sans MS", "Chalkboard SE", "Comic Neue", sans-serif;
+  --font-ui: "Playpen Sans Hebrew", "Playpen Sans", "Arial Hebrew", "Rubik", Arial, sans-serif;
+  --font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b2e2a; --rule: rgb(255 255 255 / .045); --surface: #233c36; --line: rgb(255 255 255 / .34);
+    --base: #f3a3ab; --ink: #f3f0e6; --ink-soft: #a8b9b1; --accent: #ffd166; --on-accent: #1b2e2a;
+    --sticker: #ffffff; --shadow: rgb(0 0 0 / .5); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b2e2a; --rule: rgb(255 255 255 / .045); --surface: #233c36; --line: rgb(255 255 255 / .34);
+  --base: #f3a3ab; --ink: #f3f0e6; --ink-soft: #a8b9b1; --accent: #ffd166; --on-accent: #1b2e2a;
+  --sticker: #ffffff; --shadow: rgb(0 0 0 / .5); color-scheme: dark;
+}
+
+html, body { height: 100%; }
+body {
+  background: var(--bg) repeating-linear-gradient(to bottom, transparent 0 31px, var(--rule) 31px 32px);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+body.dragging { cursor: grabbing; user-select: none; -webkit-user-select: none; }
+
+.app {
+  container-type: size;
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 540px;
+  max-width: 920px;
+  margin-inline: auto;
+  padding-block: 10px 12px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-x: clip;   /* confetti may fly past the edge without widening the page */
+}
+
+/* ---------- header: name + sticker album ---------- */
+.top { display: flex; align-items: center; gap: 12px; min-height: 44px; }
+.top h1 { margin: 0; font-size: clamp(20px, 5.2cqw, 30px); font-weight: 800; line-height: 1.1; white-space: nowrap; }
+.album { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
+.album-count { font-size: 14px; font-weight: 600; color: var(--ink-soft); white-space: nowrap; }
+.album-list { flex: 1; min-width: 0; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding-block: 2px; }
+.album-list::-webkit-scrollbar { display: none; }
+.album-list button {
+  flex: none; width: 40px; height: 40px; padding: 0; border: 0; background: none; cursor: pointer;
+  font: 26px/1 var(--font-emoji); border-radius: 10px;
+  filter: drop-shadow(0 1px 1px var(--shadow));
+}
+.album-list button:hover { transform: scale(1.12) rotate(-4deg); }
+
+/* ---------- stage: the picture ---------- */
+.stage {
+  container-type: size;
+  flex: 1 1 0;
+  min-height: 104px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.show { display: flex; align-items: center; justify-content: center; gap: 4cqw; max-width: 100%; }
+.pic {
+  flex: none; padding: 0; border: 0; background: none; cursor: pointer;
+  font: min(74cqh, 36cqw, 240px)/1.1 var(--font-emoji);
+  filter: drop-shadow(0 4px 3px var(--shadow));
+  border-radius: 24px;
+}
+.hint .pic { font-size: min(62cqh, 30cqw, 180px); }
+.cap { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.lead { font-size: clamp(14px, 9cqh, 19px); font-weight: 600; color: var(--ink-soft); }
+.he { font-size: clamp(17px, 13cqh, 30px); font-weight: 800; line-height: 1.2; }
+.hint .he { font-weight: 600; color: var(--ink-soft); font-size: clamp(15px, 10cqh, 22px); }
+.word { display: flex; direction: ltr; --wh: min(42cqh, 88px, calc(92cqw / var(--len, 4))); }
+.hint .word { --wh: min(38cqh, 76px, calc(92cqw / var(--len, 4))); }
+.word .g { height: var(--wh); width: auto; }
+.sub { font-size: 14px; color: var(--ink-soft); }
+
+.more, .none { flex-direction: column; gap: 8px; text-align: center; }
+.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; direction: ltr; }
+.chip {
+  display: flex; align-items: center; gap: 6px; padding: 4px 12px 4px 8px; cursor: pointer;
+  background: var(--surface); color: var(--ink); border: 2px solid var(--line); border-radius: 999px;
+  font: 800 clamp(16px, 11cqh, 22px)/1.2 var(--font-letters);
+}
+.chip span { font: clamp(24px, 22cqh, 44px)/1.1 var(--font-emoji); }
+.chip:hover { border-color: var(--accent); }
+
+.found .pic { animation: pop .55s cubic-bezier(.2, 1.6, .4, 1) both; }
+.found .cap { animation: rise .4s .12s ease-out both; }
+@keyframes pop { from { transform: scale(.2) rotate(-18deg); opacity: 0; } 60% { opacity: 1; } to { transform: none; } }
+@keyframes rise { from { transform: translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
+.bit { position: absolute; left: 50%; top: 50%; width: 10px; height: 14px; border-radius: 3px; pointer-events: none; }
+
+/* ---------- letter stickers ---------- */
+.tile {
+  flex: none; box-sizing: border-box; display: block; padding: 0; margin: 0; border: 0; background: none;
+  width: var(--w); aspect-ratio: 100 / 120;
+  touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+  cursor: grab; border-radius: 12px; position: relative;
+}
+.g { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 2px 1.5px var(--shadow)); pointer-events: none; }
+.g text { font: 800 86px var(--font-letters); text-anchor: middle; }
+.g-o { fill: var(--sticker); stroke: var(--sticker); stroke-width: 15; stroke-linejoin: round; }
+.g-f { fill: var(--c); }
+.ghost { filter: none; }
+.ghost text { fill: none; stroke: var(--ink-soft); stroke-width: 3.6; stroke-dasharray: 2 6.5; stroke-linecap: round; }
+.tile.floating { position: fixed; left: 0; top: 0; z-index: 50; pointer-events: none; cursor: grabbing; will-change: transform; }
+.tile.floating .g { filter: drop-shadow(0 10px 8px var(--shadow)); }
+.tile.lifted { visibility: hidden; }
+.tile.away { width: 0; }
+.tile.fly { z-index: 5; }
+@media (hover: hover) { .bank .tile:hover .g { transform: translateY(-4%) rotate(-3deg); } }
+.g { transition: transform .12s; }
+
+/* ---------- the writing line ---------- */
+.tray {
+  --tmax: min(78px, 13cqh, calc((100cqw - 24px) / 5));
+  --w: min(var(--tmax), calc((100cqw - 24px) / var(--n, 5)));
+  flex: none; box-sizing: border-box;
+  height: calc(var(--tmax) * 1.2 + 14px);
+  padding: 0 12px;
+  background: var(--surface);
+  border: 2px dashed var(--line);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; direction: ltr;
+  transition: border-color .15s, box-shadow .15s;
+}
+.tray.target { border-color: var(--accent); border-style: solid; box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent); }
+.tray.nope { animation: nope .3s; }
+@keyframes nope { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.row { position: relative; width: 100%; height: calc(var(--w) * 1.2); display: flex; justify-content: center; }
+/* three-line English handwriting guide, scaled to the letters */
+.row::before {
+  content: ""; position: absolute; inset: 0 -4px; pointer-events: none;
+  background:
+    linear-gradient(var(--base), var(--base)) 0 70% / 100% 2px no-repeat,
+    repeating-linear-gradient(to right, var(--line) 0 8px, transparent 8px 14px) 0 38% / 100% 1.5px no-repeat,
+    linear-gradient(var(--line), var(--line)) 0 15% / 100% 1.5px no-repeat;
+}
+.gap { flex: none; width: var(--w); }
+.placeholder {
+  position: absolute; inset: 0; display: grid; place-items: center; direction: rtl;
+  font-weight: 600; font-size: clamp(14px, 4.2cqw, 18px); color: var(--ink-soft); pointer-events: none;
+  text-shadow: 0 0 6px var(--surface), 0 0 6px var(--surface), 0 0 6px var(--surface);
+}
+.tray:not(.empty) .placeholder, .tray.target .placeholder { display: none; }
+
+/* ---------- buttons ---------- */
+.controls { flex: none; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 42px; padding: 6px 14px; cursor: pointer;
+  font: 600 16px/1 var(--font-ui); color: var(--ink);
+  background: var(--surface); border: 2px solid var(--ink); border-radius: 14px;
+  box-shadow: 0 3px 0 var(--ink);
+  transition: transform .08s, box-shadow .08s;
+}
+.btn svg { width: 20px; height: 20px; flex: none; }
+.btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 0 0 var(--ink); }
+.btn.primary { background: var(--accent); color: var(--on-accent); }
+.btn:disabled { opacity: .45; cursor: default; }
+@container (max-width: 480px) {
+  .controls { flex-wrap: nowrap; gap: 6px; }
+  .btn { flex: 1 1 0; min-width: 0; flex-direction: column; justify-content: center; gap: 3px; padding: 5px 2px; font-size: 13px; }
+}
+
+/* ---------- the letter sheet ---------- */
+.bank {
+  --w: min(70px, calc((100cqw - 28px) / 8), 8.6cqh);
+  flex: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 4px; direction: ltr;
+}
+.br { flex-basis: 100%; height: 0; }
+.br.short { display: none; }
+
+.note { margin: 0; text-align: center; font-size: 13px; color: var(--ink-soft); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* short, wide screens (a phone on its side): two rows of letters, page may scroll */
+@media (max-height: 500px) {
+  .app { height: auto; min-height: 100%; container-type: inline-size; }
+  .stage { flex: none; height: 110px; }
+  .tray { --tmax: min(64px, calc((100cqw - 24px) / 5)); }
+  .bank { --w: min(60px, calc((100cqw - 48px) / 13)); }
+  .br { display: none; }
+  .br.short { display: block; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .found .pic, .found .cap, .tray.nope { animation: none; }
+  .g, .btn { transition: none; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="pat-dots" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r="3.6" fill="#fff" fill-opacity=".6"/><circle cx="15" cy="15" r="3.6" fill="#fff" fill-opacity=".6"/>
+    </pattern>
+    <pattern id="pat-stripes" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(40)">
+      <rect width="5" height="14" fill="#fff" fill-opacity=".45"/>
+    </pattern>
+  </defs>
+</svg>
+
+<div class="app" lang="he" dir="rtl">
+  <header class="top">
+    <h1>בונים מילים</h1>
+    <div class="album">
+      <span class="album-count" id="albumCount"></span>
+      <div class="album-list" id="albumList" aria-label="המילים שמצאתי"></div>
+    </div>
+  </header>
+
+  <section class="stage" id="stage" aria-label="התמונה של המילה"></section>
+
+  <div class="tray empty" id="tray" aria-label="המילה שהרכבתי">
+    <div class="row" id="row"></div>
+    <div class="placeholder">גוררים לכאן אותיות ומרכיבים מילה</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn primary" id="btnSay" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+      הקראה
+    </button>
+    <button class="btn" id="btnBack" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-6-7 6-7z"/><path d="M12 9.5l5 5M17 9.5l-5 5"/></svg>
+      מחיקת אות
+    </button>
+    <button class="btn" id="btnClear" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5"/></svg>
+      ניקוי
+    </button>
+    <button class="btn" id="btnIdea" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.5h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/></svg>
+      רעיון
+    </button>
+  </div>
+
+  <div class="bank" id="bank" aria-label="האותיות"></div>
+  <p class="note" id="note" hidden>בדפדפן הזה אין הקראה בקול. פתחו את המשחק ב-Chrome או ב-Safari כדי לשמוע את המילים.</p>
+  <div class="sr" id="live" aria-live="polite"></div>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* word | picture | Hebrew | how to say it (only when it differs from the spelling) */
+const WORDS = `
+dog|🐶|כלב
+cat|🐱|חתול
+cow|🐮|פרה
+pig|🐷|חזיר
+hen|🐔|תרנגולת
+chick|🐥|אפרוח
+duck|🦆|ברווז
+bird|🐦|ציפור
+fish|🐟|דג
+frog|🐸|צפרדע
+bee|🐝|דבורה
+ant|🐜|נמלה
+bug|🐛|חרק
+ladybug|🐞|חיפושית
+bat|🦇|עטלף
+rat|🐀|חולדה
+mouse|🐭|עכבר
+fox|🦊|שועל
+owl|🦉|ינשוף
+bear|🐻|דוב
+lion|🦁|אריה
+tiger|🐯|טיגריס
+wolf|🐺|זאב
+deer|🦌|צבי
+goat|🐐|עז
+sheep|🐑|כבשה
+ram|🐏|איל
+ox|🐂|שור
+horse|🐴|סוס
+zebra|🦓|זברה
+monkey|🐵|קוף
+gorilla|🦍|גורילה
+panda|🐼|פנדה
+koala|🐨|קואלה
+rabbit|🐰|ארנב
+snake|🐍|נחש
+turtle|🐢|צב
+snail|🐌|חילזון
+crab|🦀|סרטן
+shark|🦈|כריש
+whale|🐳|לווייתן
+dolphin|🐬|דולפין
+octopus|🐙|תמנון
+penguin|🐧|פינגווין
+eagle|🦅|עיט
+parrot|🦜|תוכי
+swan|🦢|ברבור
+peacock|🦚|טווס
+flamingo|🦩|פלמינגו
+turkey|🦃|תרנגול הודו
+camel|🐫|גמל
+giraffe|🦒|ג'ירפה
+elephant|🐘|פיל
+hippo|🦛|היפופוטם
+rhino|🦏|קרנף
+kangaroo|🦘|קנגורו
+llama|🦙|לאמה
+squirrel|🐿️|סנאי
+hedgehog|🦔|קיפוד
+spider|🕷️|עכביש
+butterfly|🦋|פרפר
+worm|🪱|תולעת
+fly|🪰|זבוב
+lizard|🦎|לטאה
+crocodile|🐊|תנין
+dragon|🐉|דרקון
+unicorn|🦄|חד־קרן
+dinosaur|🦕|דינוזאור
+puppy|🐶|כלבלב
+kitten|🐱|חתלתול
+seal|🦭|כלב ים
+shrimp|🦐|שרימפס
+squid|🦑|דיונון
+scorpion|🦂|עקרב
+apple|🍎|תפוח
+banana|🍌|בננה
+pear|🍐|אגס
+peach|🍑|אפרסק
+lemon|🍋|לימון
+orange|🍊|תפוז
+grapes|🍇|ענבים
+melon|🍈|מלון
+watermelon|🍉|אבטיח
+cherry|🍒|דובדבן
+strawberry|🍓|תות שדה
+kiwi|🥝|קיווי
+mango|🥭|מנגו
+pineapple|🍍|אננס
+coconut|🥥|קוקוס
+tomato|🍅|עגבנייה
+potato|🥔|תפוח אדמה
+carrot|🥕|גזר
+corn|🌽|תירס
+onion|🧅|בצל
+garlic|🧄|שום
+pepper|🫑|פלפל
+cucumber|🥒|מלפפון
+broccoli|🥦|ברוקולי
+mushroom|🍄|פטרייה
+avocado|🥑|אבוקדו
+eggplant|🍆|חציל
+nut|🌰|אגוז
+peanut|🥜|בוטן
+bread|🍞|לחם
+cheese|🧀|גבינה
+egg|🥚|ביצה
+milk|🥛|חלב
+butter|🧈|חמאה
+honey|🍯|דבש
+rice|🍚|אורז
+pizza|🍕|פיצה
+burger|🍔|המבורגר
+hotdog|🌭|נקניקייה|hot dog
+taco|🌮|טאקו
+salad|🥗|סלט
+soup|🍲|מרק
+pasta|🍝|פסטה
+fries|🍟|צ'יפס
+sandwich|🥪|כריך
+cake|🎂|עוגה
+cupcake|🧁|קאפקייק
+cookie|🍪|עוגייה
+candy|🍬|סוכרייה
+lollipop|🍭|סוכרייה על מקל
+chocolate|🍫|שוקולד
+donut|🍩|סופגנייה
+pie|🥧|פאי
+popcorn|🍿|פופקורן
+pancakes|🥞|פנקייקים
+bagel|🥯|בייגל
+pretzel|🥨|בייגלה
+tea|🍵|תה
+coffee|☕|קפה
+juice|🧃|מיץ
+water|💧|מים
+meat|🥩|בשר
+ice|🧊|קרח
+cup|🥤|כוס
+bowl|🥣|קערה
+spoon|🥄|כף
+fork|🍴|מזלג
+knife|🔪|סכין
+plate|🍽️|צלחת
+bottle|🍼|בקבוק
+pan|🍳|מחבת
+pot|🪴|עציץ
+can|🥫|קופסת שימורים
+sun|☀️|שמש
+moon|🌙|ירח
+star|⭐|כוכב
+cloud|☁️|ענן
+rain|🌧️|גשם
+snow|❄️|שלג
+wind|💨|רוח
+rainbow|🌈|קשת בענן
+fire|🔥|אש
+tree|🌳|עץ
+flower|🌸|פרח
+rose|🌹|ורד
+tulip|🌷|צבעוני
+sunflower|🌻|חמנייה
+leaf|🍃|עלה
+plant|🌱|צמח
+cactus|🌵|קקטוס
+palm|🌴|דקל
+sea|🌊|ים
+wave|🌊|גל
+mountain|⛰️|הר
+volcano|🌋|הר געש
+island|🏝️|אי
+beach|🏖️|חוף ים
+desert|🏜️|מדבר
+earth|🌍|כדור הארץ
+world|🌍|עולם
+storm|⛈️|סערה
+tornado|🌪️|טורנדו
+snowman|⛄|איש שלג
+rock|🪨|סלע
+log|🪵|בול עץ
+web|🕸️|קורי עכביש
+planet|🪐|כוכב לכת
+comet|☄️|שביט
+day|🌞|יום
+night|🌃|לילה
+home|🏠|בית
+house|🏡|בית
+door|🚪|דלת
+window|🪟|חלון
+bed|🛏️|מיטה
+chair|🪑|כיסא
+sofa|🛋️|ספה
+lamp|💡|מנורה
+light|💡|אור
+key|🔑|מפתח
+lock|🔒|מנעול
+box|📦|קופסה
+bag|👜|תיק
+backpack|🎒|ילקוט
+book|📖|ספר
+pen|🖊️|עט
+pencil|✏️|עיפרון
+paper|📄|נייר
+ruler|📏|סרגל
+scissors|✂️|מספריים
+crayon|🖍️|צבע שעווה
+brush|🖌️|מכחול
+clock|🕐|שעון
+watch|⌚|שעון יד
+phone|📱|טלפון
+computer|💻|מחשב
+laptop|💻|מחשב נייד
+camera|📷|מצלמה
+tv|📺|טלוויזיה|T V
+radio|📻|רדיו
+bell|🔔|פעמון
+gift|🎁|מתנה
+balloon|🎈|בלון
+ball|⚽|כדור
+kite|🪁|עפיפון
+toy|🧸|צעצוע
+teddy|🧸|דובי
+doll|🪆|בובה
+robot|🤖|רובוט
+rocket|🚀|טיל
+drum|🥁|תוף
+guitar|🎸|גיטרה
+piano|🎹|פסנתר
+violin|🎻|כינור
+trumpet|🎺|חצוצרה
+music|🎵|מוזיקה
+map|🗺️|מפה
+flag|🚩|דגל
+umbrella|☂️|מטרייה
+candle|🕯️|נר
+soap|🧼|סבון
+bath|🛁|אמבטיה
+shower|🚿|מקלחת
+toilet|🚽|שירותים
+broom|🧹|מטאטא
+bucket|🪣|דלי
+basket|🧺|סל
+hammer|🔨|פטיש
+axe|🪓|גרזן
+saw|🪚|מסור
+magnet|🧲|מגנט
+money|💰|כסף
+coin|🪙|מטבע
+gem|💎|אבן חן
+diamond|💎|יהלום
+crown|👑|כתר
+ring|💍|טבעת
+net|🥅|רשת
+pin|📌|נעץ
+tent|⛺|אוהל
+ticket|🎫|כרטיס
+trophy|🏆|גביע
+medal|🏅|מדליה
+dice|🎲|קובייה
+puzzle|🧩|פאזל
+game|🎮|משחק
+letter|✉️|מכתב
+mail|📬|דואר
+newspaper|📰|עיתון
+calendar|📅|לוח שנה
+battery|🔋|סוללה
+plug|🔌|תקע
+mirror|🪞|מראה
+ladder|🪜|סולם
+telescope|🔭|טלסקופ
+microscope|🔬|מיקרוסקופ
+yoyo|🪀|יו־יו|yo-yo
+magic|🪄|קסם
+party|🎉|מסיבה
+art|🎨|אמנות
+paint|🎨|צבע
+movie|🎬|סרט
+joker|🃏|ג'וקר
+car|🚗|מכונית
+bus|🚌|אוטובוס
+van|🚐|מסחרית
+taxi|🚕|מונית
+truck|🚚|משאית
+train|🚆|רכבת
+bike|🚲|אופניים
+bicycle|🚲|אופניים
+motorcycle|🏍️|אופנוע
+scooter|🛴|קורקינט
+boat|⛵|סירה
+ship|🚢|אונייה
+plane|✈️|מטוס
+airplane|✈️|מטוס
+jet|🛩️|מטוס סילון
+helicopter|🚁|מסוק
+tractor|🚜|טרקטור
+ambulance|🚑|אמבולנס
+jeep|🚙|ג'יפ
+sled|🛷|מזחלת
+ufo|🛸|עב"ם|U F O
+anchor|⚓|עוגן
+road|🛣️|כביש
+bridge|🌉|גשר
+castle|🏰|טירה
+school|🏫|בית ספר
+hospital|🏥|בית חולים
+bank|🏦|בנק
+hotel|🏨|בית מלון
+city|🏙️|עיר
+park|🏞️|פארק
+circus|🎪|קרקס
+police|🚓|משטרה
+eye|👁️|עין
+eyes|👀|עיניים
+ear|👂|אוזן
+nose|👃|אף
+mouth|👄|פה
+lips|👄|שפתיים
+tooth|🦷|שן
+tongue|👅|לשון
+hand|✋|יד
+foot|🦶|כף רגל
+leg|🦵|רגל
+arm|💪|זרוע
+brain|🧠|מוח
+heart|❤️|לב
+bone|🦴|עצם
+baby|👶|תינוק
+boy|👦|ילד
+girl|👧|ילדה
+man|👨|איש
+woman|👩|אישה
+mom|👩|אמא
+dad|👨|אבא
+grandma|👵|סבתא
+grandpa|👴|סבא
+family|👪|משפחה
+king|🤴|מלך
+queen|👸|מלכה
+clown|🤡|ליצן
+ghost|👻|רוח רפאים
+alien|👽|חייזר
+angel|👼|מלאך
+fairy|🧚|פיה
+pirate|🏴‍☠️|פיראט
+ninja|🥷|נינג'ה
+vampire|🧛|ערפד
+doctor|🧑‍⚕️|רופא
+chef|🧑‍🍳|שף
+farmer|🧑‍🌾|חקלאי
+teacher|🧑‍🏫|מורה
+astronaut|🧑‍🚀|אסטרונאוט
+artist|🧑‍🎨|אמן
+pilot|🧑‍✈️|טייס
+cop|👮|שוטר
+smile|😀|חיוך
+happy|😀|שמח
+sad|😢|עצוב
+angry|😠|כועס
+cry|😭|לבכות
+sleep|😴|לישון
+laugh|😂|לצחוק
+love|😍|אהבה
+kiss|😘|נשיקה
+cool|😎|מגניב
+sick|🤒|חולה
+hot|🥵|חם
+cold|🥶|קר
+wink|😉|קריצה
+hug|🤗|חיבוק
+quiet|🤫|שקט
+run|🏃|לרוץ
+walk|🚶|ללכת
+swim|🏊|לשחות
+dance|💃|לרקוד
+sing|🎤|לשיר
+write|✍️|לכתוב
+clap|👏|למחוא כפיים
+surf|🏄|לגלוש
+ski|🎿|סקי
+hi|👋|היי
+hello|👋|שלום
+bye|👋|להתראות
+ok|👌|בסדר|okay
+yes|✅|כן
+no|❌|לא
+stop|🛑|עצור
+up|⬆️|למעלה
+down|⬇️|למטה
+left|⬅️|שמאלה
+right|➡️|ימינה
+question|❓|שאלה
+zero|0️⃣|אפס
+one|1️⃣|אחת
+two|2️⃣|שתיים
+three|3️⃣|שלוש
+four|4️⃣|ארבע
+five|5️⃣|חמש
+six|6️⃣|שש
+seven|7️⃣|שבע
+eight|8️⃣|שמונה
+nine|9️⃣|תשע
+ten|🔟|עשר
+red|🔴|אדום
+blue|🔵|כחול
+green|🟢|ירוק
+yellow|🟡|צהוב
+purple|🟣|סגול
+brown|🟤|חום
+black|⚫|שחור
+white|⚪|לבן
+pink|🎀|ורוד
+circle|⭕|עיגול
+square|🟦|ריבוע
+triangle|🔺|משולש
+hat|🎩|כובע
+cap|🧢|כובע מצחייה
+shirt|👕|חולצה
+dress|👗|שמלה
+pants|👖|מכנסיים
+jeans|👖|ג'ינס
+sock|🧦|גרב
+socks|🧦|גרביים
+shoe|👟|נעל
+shoes|👟|נעליים
+boot|🥾|מגף
+coat|🧥|מעיל
+scarf|🧣|צעיף
+glove|🧤|כפפה
+glasses|👓|משקפיים
+tie|👔|עניבה
+purse|👛|ארנק
+soccer|⚽|כדורגל
+football|🏈|פוטבול
+basketball|🏀|כדורסל
+tennis|🎾|טניס
+baseball|⚾|בייסבול
+golf|⛳|גולף
+goal|🥅|שער
+`;
+
+const DICT = new Map();
+for (const line of WORDS.trim().split('\n')) {
+  const [w, pic, he, say] = line.split('|');
+  DICT.set(w, { w, pic, he, say: say || w });
+}
+const ALL = [...DICT.keys()].sort((a, b) => a.length - b.length || a.localeCompare(b));
+const STARTERS = ['dog','cat','sun','bus','hat','bed','pig','cow','fox','bee','egg','car','cup','key','box','ant','owl','bat','pen','map',
+  'fish','frog','duck','star','moon','tree','cake','ball','book','lion','bear','milk','kite','bird','ship','door','rain','apple','pizza','robot'];
+
+const MAX = 12, MIN_N = 5;
+const COLORS = ['#e5484d', '#f0851a', '#dfa200', '#3fa655', '#12a594', '#3e7bfa', '#8e4ec6', '#e54699'];
+const WIDTHS = { i: 44, j: 46, l: 44, f: 56, r: 56, t: 56, m: 100, w: 96 };
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = id => document.getElementById(id);
+const stage = $('stage'), tray = $('tray'), row = $('row'), bank = $('bank');
+const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ---------- letter stickers ---------- */
+function glyph(ch, kind = 'solid', tight = false) {
+  const i = ch.charCodeAt(0) - 97;
+  const w = tight ? (WIDTHS[ch] || 68) : 100;
+  const box = `viewBox="${50 - w / 2} 0 ${w} 120"`;
+  const t = `x="50" y="84"`;
+  if (kind === 'ghost') return `<svg class="g ghost" ${box} aria-hidden="true"><text ${t}>${ch}</text></svg>`;
+  const pat = i % 5 === 1 ? 'dots' : i % 5 === 3 ? 'stripes' : '';
+  return `<svg class="g" ${box} style="--c:${COLORS[(i * 3) % 8]}" aria-hidden="true">` +
+    `<text class="g-o" ${t}>${ch}</text><text class="g-f" ${t}>${ch}</text>` +
+    (pat ? `<text ${t} fill="url(#pat-${pat})">${ch}</text>` : '') + `</svg>`;
+}
+function makeTile(ch) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'tile'; b.dataset.ch = ch;
+  b.setAttribute('aria-label', ch);
+  b.innerHTML = glyph(ch);
+  return b;
+}
+'abcdefghijklmnopqrstuvwxyz'.split('').forEach(ch => {
+  bank.append(makeTile(ch));
+  if ('elt'.includes(ch)) bank.insertAdjacentHTML('beforeend', '<span class="br"></span>');
+  if (ch === 'm') bank.insertAdjacentHTML('beforeend', '<span class="br short"></span>');
+});
+
+/* ---------- state ---------- */
+let letters = [];            // [{id, ch}] — the word on the line
+let uid = 0;
+let hint = 'dog';
+let found = [];              // newest first
+let lastWord = '';
+const gap = Object.assign(document.createElement('div'), { className: 'gap' });
+const text = () => letters.map(l => l.ch).join('');
+const tileOf = id => row.querySelector(`.tile[data-id="${id}"]`);
+
+try { found = JSON.parse(localStorage.getItem('wordbuilder.found') || '[]').filter(w => DICT.has(w)); } catch {}
+const save = () => { try { localStorage.setItem('wordbuilder.found', JSON.stringify(found)); } catch {} };
+
+function pickHint() {
+  const fresh = STARTERS.filter(w => w !== hint && !found.includes(w));
+  const pool = fresh.length ? fresh : ALL.filter(w => w !== hint && !found.includes(w));
+  const from = pool.length ? pool : STARTERS.filter(w => w !== hint);
+  return from[Math.floor(Math.random() * from.length)];
+}
+
+/* ---------- voice and sounds ---------- */
+const synth = window.speechSynthesis;
+let voice = null;
+function pickVoice() {
+  const en = (synth.getVoices() || []).filter(v => /^en[-_]/i.test(v.lang));
+  const us = en.filter(v => /^en[-_]US/i.test(v.lang));
+  voice = us.find(v => /samantha|google us|jenny|aria|zira|ava/i.test(v.name)) || us[0] ||
+          en.find(v => /^en[-_]GB/i.test(v.lang)) || en[0] || null;
+}
+if (synth) { pickVoice(); synth.addEventListener?.('voiceschanged', pickVoice); } else $('note').hidden = false;
+
+function say(what) {
+  if (!synth || !what) return;
+  const u = new SpeechSynthesisUtterance(what);
+  u.lang = voice ? voice.lang : 'en-US';
+  if (voice) u.voice = voice;
+  u.rate = 0.82; u.pitch = 1.05;
+  if (synth.speaking || synth.pending) { synth.cancel(); setTimeout(() => synth.speak(u), 90); }
+  else synth.speak(u);
+}
+
+let actx = null;
+function tone(freq, at, dur, vol) {
+  const o = actx.createOscillator(), g = actx.createGain();
+  o.type = 'triangle'; o.frequency.value = freq;
+  g.gain.setValueAtTime(0.0001, at);
+  g.gain.exponentialRampToValueAtTime(vol, at + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+  o.connect(g).connect(actx.destination);
+  o.start(at); o.stop(at + dur + 0.02);
+}
+function sound(kind, n = 0) {
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+    const t = actx.currentTime;
+    const scale = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26];
+    if (kind === 'put') tone(392 * 2 ** (scale[n % 12] / 12), t, 0.13, 0.07);
+    else if (kind === 'off') tone(220, t, 0.1, 0.05);
+    else if (kind === 'win') [523.25, 783.99].forEach((f, k) => tone(f, t + k * 0.07, 0.16, 0.05));
+  } catch {}
+}
+
+/* ---------- the writing line ---------- */
+function flip(mutate) {
+  const before = new Map([...row.children].map(el => [el, el.getBoundingClientRect()]));
+  mutate();
+  if (reduced) return;
+  for (const el of row.children) {
+    const b = before.get(el);
+    if (!b || el.classList.contains('lifted')) continue;
+    const a = el.getBoundingClientRect();
+    const dx = b.left + b.width / 2 - (a.left + a.width / 2);
+    if (Math.abs(dx) > 1) el.animate([{ transform: `translateX(${dx}px)` }, { transform: 'none' }],
+      { duration: 170, easing: 'cubic-bezier(.2,.8,.3,1)' });
+  }
+}
+function setN(n) { tray.style.setProperty('--n', Math.max(MIN_N, n)); }
+function syncTray() {
+  const want = new Set(letters.map(l => String(l.id)));
+  for (const el of [...row.querySelectorAll('.tile')]) if (!want.has(el.dataset.id)) el.remove();
+  gap.remove();
+  letters.forEach((l, i) => {
+    let el = tileOf(l.id);
+    if (!el) { el = makeTile(l.ch); el.dataset.id = l.id; row.append(el); }
+    el.style.order = 2 * i + 1;
+    el.classList.remove('lifted', 'away');
+    el.setAttribute('aria-label', `${l.ch} — לחיצה מסירה את האות`);
+  });
+  setN(letters.length);
+  tray.classList.toggle('empty', !letters.length);
+  tray.classList.remove('target');
+}
+function nope() {
+  sound('off');
+  tray.classList.remove('nope'); void tray.offsetWidth; tray.classList.add('nope');
+}
+
+/* ---------- stage ---------- */
+function candidates(prefix) {
+  const hits = ALL.filter(w => w.startsWith(prefix) && w !== prefix);
+  return [...hits.filter(w => !found.includes(w)), ...hits.filter(w => found.includes(w))].slice(0, 4);
+}
+function wordGlyphs(w, done = w.length) {
+  return `<div class="word" style="--len:${Math.max(3, w.length)}">` +
+    [...w].map((ch, i) => glyph(ch, i < done ? 'solid' : 'ghost', true)).join('') + `</div>`;
+}
+function renderStage(celebrating) {
+  const w = text();
+  const hit = DICT.get(w);
+  let html;
+  if (hit) {
+    html = `<div class="show ${celebrating ? 'found' : ''}">
+      <button class="pic" type="button" data-say="${esc(hit.say)}" aria-label="לשמוע שוב את המילה ${w}">${hit.pic}</button>
+      <div class="cap">${wordGlyphs(w)}<div class="he">${esc(hit.he)}</div></div></div>`;
+  } else if (hint.startsWith(w)) {
+    const h = DICT.get(hint);
+    html = `<div class="show hint">
+      <button class="pic" type="button" data-say="${esc(h.say)}" aria-label="לשמוע את המילה ${hint}">${h.pic}</button>
+      <div class="cap"><div class="lead">${w ? 'ממשיכים…' : 'נסו להרכיב את המילה'}</div>${wordGlyphs(hint, w.length)}
+      <div class="he">${esc(h.he)}</div></div></div>`;
+  } else {
+    const list = candidates(w);
+    html = list.length
+      ? `<div class="show more"><div class="lead">מה אפשר להרכיב מכאן?</div><div class="chips">` +
+        list.map(c => `<button class="chip" type="button" data-hint="${c}"><span>${DICT.get(c).pic}</span>${c}</button>`).join('') +
+        `</div></div>`
+      : `<div class="show none"><div class="lead">עוד אין לי תמונה למילה שמתחילה ב־<bdi dir="ltr">${w}</bdi></div>
+         <div class="sub">נסו אות אחרת, או לחצו על ״הקראה״ כדי לשמוע אותה.</div></div>`;
+  }
+  stage.innerHTML = html;
+}
+function confetti(n) {
+  if (reduced) return;
+  for (let i = 0; i < n; i++) {
+    const bit = document.createElement('i');
+    bit.className = 'bit';
+    bit.style.background = COLORS[i % COLORS.length];
+    stage.append(bit);
+    const a = Math.random() * Math.PI * 2, d = 70 + Math.random() * 150;
+    bit.animate([
+      { transform: 'translate(-50%,-50%) rotate(0)', opacity: 1 },
+      { transform: `translate(calc(-50% + ${Math.cos(a) * d}px), calc(-50% + ${Math.sin(a) * d - 30}px)) rotate(${Math.random() * 540 - 270}deg)`, opacity: 0 }
+    ], { duration: 750 + Math.random() * 450, easing: 'cubic-bezier(.15,.7,.3,1)' }).onfinish = () => bit.remove();
+  }
+}
+function renderAlbum() {
+  $('albumCount').textContent = found.length
+    ? (found.length === 1 ? 'מילה אחת' : `${found.length} מילים`)
+    : 'כאן ייאספו המילים שתרכיבו';
+  $('albumList').innerHTML = found.map(w =>
+    `<button type="button" data-word="${w}" title="${w}" aria-label="${w}">${DICT.get(w).pic}</button>`).join('');
+}
+
+/* Runs after every change to the line. Speaks inside the same tap, so phones allow the sound. */
+function changed({ quiet = false } = {}) {
+  const w = text();
+  const hit = DICT.get(w);
+  const celebrate = !!hit && w !== lastWord && !quiet;
+  const isNew = !!hit && !found.includes(w);
+  if (isNew) { found.unshift(w); save(); renderAlbum(); }
+  if (!w && found.includes(hint)) hint = pickHint();
+  lastWord = w;
+  renderStage(celebrate);
+  if (celebrate) {
+    confetti(isNew ? 24 : 8);
+    sound('win'); say(hit.say);
+    $('live').textContent = `${w} — ${hit.he}`;
+    if (!reduced) letters.forEach((l, i) => tileOf(l.id)?.animate(
+      [{ transform: 'none' }, { transform: 'translateY(-22%) rotate(-4deg)' }, { transform: 'none' }],
+      { duration: 380, delay: 60 * i, easing: 'cubic-bezier(.3,.7,.4,1)' }));
+  }
+  $('btnSay').disabled = $('btnBack').disabled = $('btnClear').disabled = !w;
+}
+
+function addLetter(ch, fromEl) {
+  if (letters.length >= MAX) return nope();
+  const item = { id: ++uid, ch };
+  flip(() => { letters.push(item); syncTray(); });
+  sound('put', letters.length - 1);
+  const el = tileOf(item.id);
+  if (el && !reduced) {
+    const b = el.getBoundingClientRect();
+    if (fromEl) {
+      const a = fromEl.getBoundingClientRect();
+      el.classList.add('fly');
+      el.animate([{ transform: `translate(${a.left - b.left}px, ${a.top - b.top}px) scale(${a.width / b.width})` }, { transform: 'none' }],
+        { duration: 260, easing: 'cubic-bezier(.2,.9,.3,1.1)' }).onfinish = () => el.classList.remove('fly');
+    } else {
+      el.animate([{ transform: 'scale(.4)' }, { transform: 'none' }], { duration: 180, easing: 'cubic-bezier(.2,1.4,.4,1)' });
+    }
+  }
+  changed();
+}
+function removeLetter(id) {
+  if (!letters.some(l => l.id === id)) return;
+  flip(() => { letters = letters.filter(l => l.id !== id); syncTray(); });
+  sound('off');
+  changed();
+}
+function setWord(w, opts) {
+  letters = [...w].slice(0, MAX).map(ch => ({ id: ++uid, ch }));
+  lastWord = '';
+  syncTray();
+  changed(opts);
+}
+function clearAll() { letters = []; syncTray(); changed(); }
+
+/* ---------- dragging ---------- */
+let p = null;   // the finger or mouse currently holding a letter
+const inZone = (x, y) => y < tray.getBoundingClientRect().bottom + 14;
+function dropIndex(x) {
+  let k = 0;
+  for (const el of row.querySelectorAll('.tile:not(.lifted)')) {
+    const r = el.getBoundingClientRect();
+    if (r.left + r.width / 2 < x) k++;
+  }
+  return k;
+}
+function others() { return p && p.fromTray ? letters.filter(l => l.id !== p.lid) : letters; }
+function layoutDrag() {
+  const rest = others();
+  rest.forEach((l, j) => { const el = tileOf(l.id); if (el) el.style.order = 2 * j + 1; });
+  if (p.fromTray) {
+    p.tile.style.order = 2 * Math.max(p.k, 0);
+    p.tile.classList.toggle('away', !p.zone);
+  } else if (p.zone) {
+    gap.style.order = 2 * p.k;
+    if (!gap.isConnected) row.append(gap);
+  } else gap.remove();
+  setN(rest.length + (p.zone ? 1 : 0));
+  tray.classList.toggle('target', p.zone);
+  tray.classList.toggle('empty', !rest.length && !p.zone);
+}
+function startDrag(e) {
+  p.active = true;
+  const r = p.tile.getBoundingClientRect();
+  p.gw = Math.max(r.width, 58); p.gh = p.gw * 1.2;
+  p.ghost = makeTile(p.ch);
+  p.ghost.classList.add('floating');
+  p.ghost.style.width = p.gw + 'px';
+  document.body.append(p.ghost);
+  document.body.classList.add('dragging');
+  if (p.fromTray) p.tile.classList.add('lifted');
+  sound('put', letters.length);
+}
+function moveDrag(e) {
+  const lift = e.pointerType === 'mouse' ? 0 : p.gh * 0.55;   // keep the letter visible above the finger
+  const x = e.clientX, y = e.clientY - lift;
+  p.ghost.style.transform = `translate(${x - p.gw / 2}px, ${y - p.gh / 2}px) rotate(-5deg) scale(1.1)`;
+  const zone = inZone(x, y) && (p.fromTray || letters.length < MAX);
+  const k = zone ? dropIndex(x) : -1;
+  if (zone !== p.zone || k !== p.k) { p.zone = zone; p.k = k; flip(layoutDrag); }
+  p.full = !p.fromTray && letters.length >= MAX && inZone(x, y);
+}
+function endDrag(cur, cancelled) {
+  const rest = cur.fromTray ? letters.filter(l => l.id !== cur.lid) : letters.slice();
+  let landed = null;
+  if (cancelled) { /* leave the word as it was */ }
+  else if (cur.zone) {
+    landed = cur.fromTray ? letters.find(l => l.id === cur.lid) : { id: ++uid, ch: cur.ch };
+    rest.splice(cur.k, 0, landed);
+    letters = rest;
+  } else if (cur.fromTray) letters = rest;
+  document.body.classList.remove('dragging');
+  syncTray();
+  if (landed) {
+    cur.ghost.remove();
+    sound('put', letters.indexOf(landed));
+    if (!reduced) tileOf(landed.id)?.animate([{ transform: 'scale(1.25) rotate(-5deg)' }, { transform: 'none' }],
+      { duration: 200, easing: 'cubic-bezier(.2,1.5,.4,1)' });
+  } else {
+    if (cur.full) nope(); else if (cur.fromTray && !cancelled) sound('off');
+    const g = cur.ghost;
+    if (reduced) g.remove();
+    else g.animate([{ opacity: 1 }, { opacity: 0, transform: g.style.transform + ' scale(.4)' }], { duration: 160 }).onfinish = () => g.remove();
+  }
+  changed();
+}
+
+document.addEventListener('pointerdown', e => {
+  const tile = e.target.closest?.('.tile');
+  if (!tile || p || tile.classList.contains('floating') || (e.pointerType === 'mouse' && e.button !== 0)) return;
+  e.preventDefault();
+  try { tile.setPointerCapture(e.pointerId); } catch {}
+  const fromTray = tile.parentNode === row;
+  p = { pid: e.pointerId, tile, ch: tile.dataset.ch, fromTray, lid: fromTray ? +tile.dataset.id : 0,
+        x0: e.clientX, y0: e.clientY, active: false, zone: false, k: -1, full: false };
+});
+document.addEventListener('pointermove', e => {
+  if (!p || e.pointerId !== p.pid) return;
+  if (!p.active) {
+    if (Math.hypot(e.clientX - p.x0, e.clientY - p.y0) < 8) return;
+    startDrag(e);
+  }
+  moveDrag(e);
+});
+function release(e) {
+  if (!p || e.pointerId !== p.pid) return;
+  const cur = p, cancelled = e.type === 'pointercancel';
+  if (cur.active) { if (!cancelled) moveDrag(e); p = null; endDrag(cur, cancelled); return; }
+  p = null;
+  if (cancelled) return;
+  if (cur.fromTray) removeLetter(cur.lid); else addLetter(cur.ch, cur.tile);
+}
+document.addEventListener('pointerup', release);
+document.addEventListener('pointercancel', release);
+document.addEventListener('contextmenu', e => { if (e.target.closest?.('.tile')) e.preventDefault(); });
+
+/* keyboard: Enter/Space on a letter, or simply typing */
+document.addEventListener('click', e => {
+  const tile = e.target.closest?.('.tile');
+  if (tile && e.detail === 0) {
+    if (tile.parentNode === row) removeLetter(+tile.dataset.id); else addLetter(tile.dataset.ch, tile);
+    return;
+  }
+  const t = e.target.closest?.('[data-say],[data-hint],[data-word]');
+  if (!t) return;
+  if (t.dataset.say) { say(t.dataset.say); if (!reduced) t.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.12)' }, { transform: 'scale(1)' }], 260); }
+  else if (t.dataset.hint) { hint = t.dataset.hint; renderStage(false); }
+  else if (t.dataset.word) setWord(t.dataset.word);
+});
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (/^[a-zA-Z]$/.test(e.key)) addLetter(e.key.toLowerCase());
+  else if (e.key === 'Backspace') { e.preventDefault(); if (letters.length) removeLetter(letters[letters.length - 1].id); }
+  else if (e.key === 'Escape') clearAll();
+  else if (e.key === 'Enter' && !e.target.closest?.('button')) speakLine();
+});
+
+function speakLine() {
+  const w = text();
+  if (w) say(DICT.get(w)?.say || w);
+}
+$('btnSay').addEventListener('click', speakLine);
+$('btnBack').addEventListener('click', () => letters.length && removeLetter(letters[letters.length - 1].id));
+$('btnClear').addEventListener('click', clearAll);
+$('btnIdea').addEventListener('click', () => { hint = pickHint(); letters = []; syncTray(); changed(); });
+
+/* ---------- start ---------- */
+function start(data) {
+  data = data || {};
+  if (typeof data.hint === 'string' && DICT.has(data.hint)) hint = data.hint;
+  renderAlbum();
+  const w = typeof data.word === 'string' ? data.word.replace(/[^a-z]/g, '') : '';
+  if (w) setWord(w, { quiet: true }); else { syncTray(); changed({ quiet: true }); }
+}
+const hot = window.claude?.hot;
+try { hot?.snapshot?.(() => ({ word: text(), hint })); } catch {}
+if (hot?.ready) hot.ready(start); else start(hot?.data ?? {});
+})();
+</script>
