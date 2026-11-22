@@ -1,0 +1,1100 @@
+[
+ {
+  "file": "01-characters/01-orange-tom/00-standing.png",
+  "he": "טום (שבט כתום) – עומד/ת ומחייך/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/01-orange-tom/01-wave.png",
+  "he": "טום (שבט כתום) – מנופף/ת לשלום",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/01-orange-tom/02-celebrate.png",
+  "he": "טום (שבט כתום) – חוגג/ת ניצחון",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/01-orange-tom/03-shocked.png",
+  "he": "טום (שבט כתום) – בהלם",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/01-orange-tom/04-angry.png",
+  "he": "טום (שבט כתום) – כועס/ת ונחוש/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/01-orange-tom/05-sad.png",
+  "he": "טום (שבט כתום) – עצוב/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/01-orange-tom/06-thinking.png",
+  "he": "טום (שבט כתום) – חושב/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/01-orange-tom/07-scheming.png",
+  "he": "טום (שבט כתום) – זומם/ת תוכנית",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/01-orange-tom/08-presenting.png",
+  "he": "טום (שבט כתום) – מצביע/ה ומציג/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/01-orange-tom/09-torch.png",
+  "he": "טום (שבט כתום) – מחזיק/ה לפיד",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/avatars/01-orange-tom.png",
+  "he": "טום (שבט כתום) – תמונת פרופיל עגולה",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "01-characters/02-blue-maya/00-standing.png",
+  "he": "מאיה (שבט כחול) – עומד/ת ומחייך/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/02-blue-maya/01-wave.png",
+  "he": "מאיה (שבט כחול) – מנופף/ת לשלום",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/02-blue-maya/02-celebrate.png",
+  "he": "מאיה (שבט כחול) – חוגג/ת ניצחון",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/02-blue-maya/03-shocked.png",
+  "he": "מאיה (שבט כחול) – בהלם",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/02-blue-maya/04-angry.png",
+  "he": "מאיה (שבט כחול) – כועס/ת ונחוש/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/02-blue-maya/05-sad.png",
+  "he": "מאיה (שבט כחול) – עצוב/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/02-blue-maya/06-thinking.png",
+  "he": "מאיה (שבט כחול) – חושב/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/02-blue-maya/07-scheming.png",
+  "he": "מאיה (שבט כחול) – זומם/ת תוכנית",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/02-blue-maya/08-presenting.png",
+  "he": "מאיה (שבט כחול) – מצביע/ה ומציג/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/02-blue-maya/09-torch.png",
+  "he": "מאיה (שבט כחול) – מחזיק/ה לפיד",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/avatars/02-blue-maya.png",
+  "he": "מאיה (שבט כחול) – תמונת פרופיל עגולה",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "01-characters/03-blue-dan/00-standing.png",
+  "he": "דן (שבט כחול) – עומד/ת ומחייך/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/03-blue-dan/01-wave.png",
+  "he": "דן (שבט כחול) – מנופף/ת לשלום",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/03-blue-dan/02-celebrate.png",
+  "he": "דן (שבט כחול) – חוגג/ת ניצחון",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/03-blue-dan/03-shocked.png",
+  "he": "דן (שבט כחול) – בהלם",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/03-blue-dan/04-angry.png",
+  "he": "דן (שבט כחול) – כועס/ת ונחוש/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/03-blue-dan/05-sad.png",
+  "he": "דן (שבט כחול) – עצוב/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/03-blue-dan/06-thinking.png",
+  "he": "דן (שבט כחול) – חושב/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/03-blue-dan/07-scheming.png",
+  "he": "דן (שבט כחול) – זומם/ת תוכנית",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/03-blue-dan/08-presenting.png",
+  "he": "דן (שבט כחול) – מצביע/ה ומציג/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/03-blue-dan/09-torch.png",
+  "he": "דן (שבט כחול) – מחזיק/ה לפיד",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/avatars/03-blue-dan.png",
+  "he": "דן (שבט כחול) – תמונת פרופיל עגולה",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "01-characters/04-orange-noa/00-standing.png",
+  "he": "נועה (שבט כתום) – עומד/ת ומחייך/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/04-orange-noa/01-wave.png",
+  "he": "נועה (שבט כתום) – מנופף/ת לשלום",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/04-orange-noa/02-celebrate.png",
+  "he": "נועה (שבט כתום) – חוגג/ת ניצחון",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/04-orange-noa/03-shocked.png",
+  "he": "נועה (שבט כתום) – בהלם",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/04-orange-noa/04-angry.png",
+  "he": "נועה (שבט כתום) – כועס/ת ונחוש/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/04-orange-noa/05-sad.png",
+  "he": "נועה (שבט כתום) – עצוב/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/04-orange-noa/06-thinking.png",
+  "he": "נועה (שבט כתום) – חושב/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/04-orange-noa/07-scheming.png",
+  "he": "נועה (שבט כתום) – זומם/ת תוכנית",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/04-orange-noa/08-presenting.png",
+  "he": "נועה (שבט כתום) – מצביע/ה ומציג/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/04-orange-noa/09-torch.png",
+  "he": "נועה (שבט כתום) – מחזיק/ה לפיד",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/avatars/04-orange-noa.png",
+  "he": "נועה (שבט כתום) – תמונת פרופיל עגולה",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "01-characters/05-blue-ori/00-standing.png",
+  "he": "אורי (שבט כחול) – עומד/ת ומחייך/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/05-blue-ori/01-wave.png",
+  "he": "אורי (שבט כחול) – מנופף/ת לשלום",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/05-blue-ori/02-celebrate.png",
+  "he": "אורי (שבט כחול) – חוגג/ת ניצחון",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/05-blue-ori/03-shocked.png",
+  "he": "אורי (שבט כחול) – בהלם",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/05-blue-ori/04-angry.png",
+  "he": "אורי (שבט כחול) – כועס/ת ונחוש/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/05-blue-ori/05-sad.png",
+  "he": "אורי (שבט כחול) – עצוב/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/05-blue-ori/06-thinking.png",
+  "he": "אורי (שבט כחול) – חושב/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/05-blue-ori/07-scheming.png",
+  "he": "אורי (שבט כחול) – זומם/ת תוכנית",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/05-blue-ori/08-presenting.png",
+  "he": "אורי (שבט כחול) – מצביע/ה ומציג/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/05-blue-ori/09-torch.png",
+  "he": "אורי (שבט כחול) – מחזיק/ה לפיד",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/avatars/05-blue-ori.png",
+  "he": "אורי (שבט כחול) – תמונת פרופיל עגולה",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "01-characters/06-orange-shira/00-standing.png",
+  "he": "שירה (שבט כתום) – עומד/ת ומחייך/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/06-orange-shira/01-wave.png",
+  "he": "שירה (שבט כתום) – מנופף/ת לשלום",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/06-orange-shira/02-celebrate.png",
+  "he": "שירה (שבט כתום) – חוגג/ת ניצחון",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/06-orange-shira/03-shocked.png",
+  "he": "שירה (שבט כתום) – בהלם",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/06-orange-shira/04-angry.png",
+  "he": "שירה (שבט כתום) – כועס/ת ונחוש/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/06-orange-shira/05-sad.png",
+  "he": "שירה (שבט כתום) – עצוב/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/06-orange-shira/06-thinking.png",
+  "he": "שירה (שבט כתום) – חושב/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/06-orange-shira/07-scheming.png",
+  "he": "שירה (שבט כתום) – זומם/ת תוכנית",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/06-orange-shira/08-presenting.png",
+  "he": "שירה (שבט כתום) – מצביע/ה ומציג/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/06-orange-shira/09-torch.png",
+  "he": "שירה (שבט כתום) – מחזיק/ה לפיד",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/avatars/06-orange-shira.png",
+  "he": "שירה (שבט כתום) – תמונת פרופיל עגולה",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "01-characters/07-orange-moshe/00-standing.png",
+  "he": "משה (שבט כתום) – עומד/ת ומחייך/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/07-orange-moshe/01-wave.png",
+  "he": "משה (שבט כתום) – מנופף/ת לשלום",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/07-orange-moshe/02-celebrate.png",
+  "he": "משה (שבט כתום) – חוגג/ת ניצחון",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/07-orange-moshe/03-shocked.png",
+  "he": "משה (שבט כתום) – בהלם",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/07-orange-moshe/04-angry.png",
+  "he": "משה (שבט כתום) – כועס/ת ונחוש/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/07-orange-moshe/05-sad.png",
+  "he": "משה (שבט כתום) – עצוב/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/07-orange-moshe/06-thinking.png",
+  "he": "משה (שבט כתום) – חושב/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/07-orange-moshe/07-scheming.png",
+  "he": "משה (שבט כתום) – זומם/ת תוכנית",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/07-orange-moshe/08-presenting.png",
+  "he": "משה (שבט כתום) – מצביע/ה ומציג/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/07-orange-moshe/09-torch.png",
+  "he": "משה (שבט כתום) – מחזיק/ה לפיד",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/avatars/07-orange-moshe.png",
+  "he": "משה (שבט כתום) – תמונת פרופיל עגולה",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "01-characters/08-blue-lea/00-standing.png",
+  "he": "לאה (שבט כחול) – עומד/ת ומחייך/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/08-blue-lea/01-wave.png",
+  "he": "לאה (שבט כחול) – מנופף/ת לשלום",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/08-blue-lea/02-celebrate.png",
+  "he": "לאה (שבט כחול) – חוגג/ת ניצחון",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/08-blue-lea/03-shocked.png",
+  "he": "לאה (שבט כחול) – בהלם",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/08-blue-lea/04-angry.png",
+  "he": "לאה (שבט כחול) – כועס/ת ונחוש/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/08-blue-lea/05-sad.png",
+  "he": "לאה (שבט כחול) – עצוב/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/08-blue-lea/06-thinking.png",
+  "he": "לאה (שבט כחול) – חושב/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/08-blue-lea/07-scheming.png",
+  "he": "לאה (שבט כחול) – זומם/ת תוכנית",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/08-blue-lea/08-presenting.png",
+  "he": "לאה (שבט כחול) – מצביע/ה ומציג/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/08-blue-lea/09-torch.png",
+  "he": "לאה (שבט כחול) – מחזיק/ה לפיד",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/avatars/08-blue-lea.png",
+  "he": "לאה (שבט כחול) – תמונת פרופיל עגולה",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "01-characters/09-host/00-standing.png",
+  "he": "המנחה – עומד/ת ומחייך/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/09-host/01-wave.png",
+  "he": "המנחה – מנופף/ת לשלום",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/09-host/02-celebrate.png",
+  "he": "המנחה – חוגג/ת ניצחון",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/09-host/03-shocked.png",
+  "he": "המנחה – בהלם",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/09-host/04-angry.png",
+  "he": "המנחה – כועס/ת ונחוש/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/09-host/05-sad.png",
+  "he": "המנחה – עצוב/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/09-host/06-thinking.png",
+  "he": "המנחה – חושב/ת",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/09-host/07-scheming.png",
+  "he": "המנחה – זומם/ת תוכנית",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/09-host/08-presenting.png",
+  "he": "המנחה – מצביע/ה ומציג/ה",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/09-host/09-torch.png",
+  "he": "המנחה – מחזיק/ה לפיד",
+  "w": 900,
+  "h": 1350
+ },
+ {
+  "file": "01-characters/avatars/09-host.png",
+  "he": "המנחה – תמונת פרופיל עגולה",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "02-backgrounds/01-beach-day.png",
+  "he": "חוף טרופי ביום",
+  "w": 1920,
+  "h": 1080
+ },
+ {
+  "file": "02-backgrounds/02-beach-sunset.png",
+  "he": "שקיעה על החוף",
+  "w": 1920,
+  "h": 1080
+ },
+ {
+  "file": "02-backgrounds/03-jungle.png",
+  "he": "ג׳ונגל",
+  "w": 1920,
+  "h": 1080
+ },
+ {
+  "file": "02-backgrounds/04-tribal-council.png",
+  "he": "מועצת השבט בלילה",
+  "w": 1920,
+  "h": 1080
+ },
+ {
+  "file": "02-backgrounds/05-camp.png",
+  "he": "המחנה – מחסה ומדורה",
+  "w": 1920,
+  "h": 1080
+ },
+ {
+  "file": "02-backgrounds/06-challenge-arena.png",
+  "he": "זירת משימות",
+  "w": 1920,
+  "h": 1080
+ },
+ {
+  "file": "02-backgrounds/07-island-ocean.png",
+  "he": "אי בודד באמצע האוקיינוס",
+  "w": 1920,
+  "h": 1080
+ },
+ {
+  "file": "02-backgrounds/08-jungle-frame-light.png",
+  "he": "מסגרת ג׳ונגל עם מרכז בהיר לטקסט",
+  "w": 1920,
+  "h": 1080
+ },
+ {
+  "file": "02-backgrounds/09-wood-planks.png",
+  "he": "קיר קרשי עץ",
+  "w": 1920,
+  "h": 1080
+ },
+ {
+  "file": "02-backgrounds/10-sand-light.png",
+  "he": "חול בהיר (לשקופיות טקסט)",
+  "w": 1920,
+  "h": 1080
+ },
+ {
+  "file": "03-speech-bubbles/speech-oval-tail-left.png",
+  "he": "בועת דיבור אובלית – זנב שמאלה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/speech-oval-tail-right.png",
+  "he": "בועת דיבור אובלית – זנב ימינה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/speech-rounded-tail-left.png",
+  "he": "בועת דיבור מלבנית – זנב שמאלה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/speech-rounded-tail-right.png",
+  "he": "בועת דיבור מלבנית – זנב ימינה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/thought-cloud-tail-left.png",
+  "he": "בועת מחשבה (ענן) – זנב שמאלה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/thought-cloud-tail-right.png",
+  "he": "בועת מחשבה (ענן) – זנב ימינה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/shout-tail-left.png",
+  "he": "בועת צעקה – זנב שמאלה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/shout-tail-right.png",
+  "he": "בועת צעקה – זנב ימינה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/whisper-tail-left.png",
+  "he": "בועת לחישה (קו מקווקו) – זנב שמאלה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/whisper-tail-right.png",
+  "he": "בועת לחישה (קו מקווקו) – זנב ימינה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/parchment-tail-left.png",
+  "he": "בועת קלף – זנב שמאלה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/parchment-tail-right.png",
+  "he": "בועת קלף – זנב ימינה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/wood-tail-left.png",
+  "he": "בועת עץ – זנב שמאלה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/wood-tail-right.png",
+  "he": "בועת עץ – זנב ימינה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/orange-tribe-tail-left.png",
+  "he": "בועה כתומה (שבט כתום) – זנב שמאלה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/orange-tribe-tail-right.png",
+  "he": "בועה כתומה (שבט כתום) – זנב ימינה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/blue-tribe-tail-left.png",
+  "he": "בועה כחולה (שבט כחול) – זנב שמאלה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/blue-tribe-tail-right.png",
+  "he": "בועה כחולה (שבט כחול) – זנב ימינה",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "03-speech-bubbles/caption-box.png",
+  "he": "תיבת כיתוב / קריין",
+  "w": 800,
+  "h": 580
+ },
+ {
+  "file": "04-props/torch-lit.png",
+  "he": "לפיד דולק",
+  "w": 450,
+  "h": 1200
+ },
+ {
+  "file": "04-props/torch-snuffed.png",
+  "he": "לפיד כבוי (הודחת!)",
+  "w": 450,
+  "h": 1200
+ },
+ {
+  "file": "04-props/campfire.png",
+  "he": "מדורה",
+  "w": 1050,
+  "h": 900
+ },
+ {
+  "file": "04-props/immunity-necklace.png",
+  "he": "שרשרת חסינות",
+  "w": 900,
+  "h": 1140
+ },
+ {
+  "file": "04-props/hidden-idol-glowing.png",
+  "he": "פסל חסינות נסתר (זוהר)",
+  "w": 750,
+  "h": 1020
+ },
+ {
+  "file": "04-props/hidden-idol.png",
+  "he": "פסל חסינות נסתר",
+  "w": 750,
+  "h": 1020
+ },
+ {
+  "file": "04-props/tiki-mask.png",
+  "he": "מסכת טיקי",
+  "w": 750,
+  "h": 1140
+ },
+ {
+  "file": "04-props/voting-urn.png",
+  "he": "כד הצבעות",
+  "w": 900,
+  "h": 1020
+ },
+ {
+  "file": "04-props/vote-parchment.png",
+  "he": "פתק הצבעה ריק (לכתוב שם)",
+  "w": 1050,
+  "h": 690
+ },
+ {
+  "file": "04-props/treasure-map.png",
+  "he": "מפת אוצר",
+  "w": 1350,
+  "h": 960
+ },
+ {
+  "file": "04-props/treasure-chest.png",
+  "he": "תיבת אוצר",
+  "w": 1050,
+  "h": 900
+ },
+ {
+  "file": "04-props/signpost.png",
+  "he": "שלט כיוונים ריק",
+  "w": 900,
+  "h": 1200
+ },
+ {
+  "file": "04-props/shelter.png",
+  "he": "מחסה / בקתה",
+  "w": 1350,
+  "h": 1050
+ },
+ {
+  "file": "04-props/palm-tree.png",
+  "he": "עץ דקל",
+  "w": 1140,
+  "h": 1500
+ },
+ {
+  "file": "04-props/coconut.png",
+  "he": "קוקוס",
+  "w": 750,
+  "h": 615
+ },
+ {
+  "file": "04-props/coconut-drink.png",
+  "he": "משקה קוקוס",
+  "w": 750,
+  "h": 705
+ },
+ {
+  "file": "04-props/flag-orange.png",
+  "he": "דגל שבט כתום",
+  "w": 720,
+  "h": 1200
+ },
+ {
+  "file": "04-props/flag-blue.png",
+  "he": "דגל שבט כחול",
+  "w": 720,
+  "h": 1200
+ },
+ {
+  "file": "04-props/flag-purple.png",
+  "he": "דגל שבט סגול (איחוד)",
+  "w": 720,
+  "h": 1200
+ },
+ {
+  "file": "04-props/flag-green.png",
+  "he": "דגל שבט ירוק",
+  "w": 720,
+  "h": 1200
+ },
+ {
+  "file": "04-props/buff-orange.png",
+  "he": "באף כתום",
+  "w": 900,
+  "h": 540
+ },
+ {
+  "file": "04-props/buff-blue.png",
+  "he": "באף כחול",
+  "w": 900,
+  "h": 540
+ },
+ {
+  "file": "04-props/buff-purple.png",
+  "he": "באף סגול",
+  "w": 900,
+  "h": 540
+ },
+ {
+  "file": "04-props/buff-green.png",
+  "he": "באף ירוק",
+  "w": 900,
+  "h": 540
+ },
+ {
+  "file": "04-props/message-in-bottle.png",
+  "he": "מכתב בבקבוק",
+  "w": 900,
+  "h": 540
+ },
+ {
+  "file": "04-props/compass.png",
+  "he": "מצפן",
+  "w": 750,
+  "h": 750
+ },
+ {
+  "file": "04-props/trophy.png",
+  "he": "גביע המנצח",
+  "w": 750,
+  "h": 960
+ },
+ {
+  "file": "04-props/hourglass.png",
+  "he": "שעון חול",
+  "w": 600,
+  "h": 915
+ },
+ {
+  "file": "04-props/puzzle-piece.png",
+  "he": "חלק פאזל (משימה)",
+  "w": 630,
+  "h": 630
+ },
+ {
+  "file": "04-props/parrot.png",
+  "he": "תוכי",
+  "w": 750,
+  "h": 930
+ },
+ {
+  "file": "04-props/crab.png",
+  "he": "סרטן",
+  "w": 750,
+  "h": 570
+ },
+ {
+  "file": "04-props/fish.png",
+  "he": "דג",
+  "w": 750,
+  "h": 450
+ },
+ {
+  "file": "04-props/hibiscus-flower.png",
+  "he": "פרח היביסקוס",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "04-props/rock.png",
+  "he": "סלע עם צמחייה",
+  "w": 750,
+  "h": 480
+ },
+ {
+  "file": "04-props/corner-leaves.png",
+  "he": "עלים לפינת שקופית",
+  "w": 960,
+  "h": 960
+ },
+ {
+  "file": "04-props/vines-top-border.png",
+  "he": "גפנים תלויות – גבול עליון",
+  "w": 1920,
+  "h": 440
+ },
+ {
+  "file": "04-props/bushes-bottom-border.png",
+  "he": "שיחים – גבול תחתון",
+  "w": 1920,
+  "h": 330
+ },
+ {
+  "file": "05-frames-and-signs/wooden-title-sign.png",
+  "he": "שלט עץ גדול לכותרת",
+  "w": 1600,
+  "h": 520
+ },
+ {
+  "file": "05-frames-and-signs/wooden-sign-medium.png",
+  "he": "שלט עץ בינוני",
+  "w": 1470,
+  "h": 705
+ },
+ {
+  "file": "05-frames-and-signs/name-plank-natural.png",
+  "he": "לוח שם – עץ טבעי",
+  "w": 1080,
+  "h": 330
+ },
+ {
+  "file": "05-frames-and-signs/name-plank-orange.png",
+  "he": "לוח שם – כתום",
+  "w": 1080,
+  "h": 330
+ },
+ {
+  "file": "05-frames-and-signs/name-plank-blue.png",
+  "he": "לוח שם – כחול",
+  "w": 1080,
+  "h": 330
+ },
+ {
+  "file": "05-frames-and-signs/name-plank-purple.png",
+  "he": "לוח שם – סגול",
+  "w": 1080,
+  "h": 330
+ },
+ {
+  "file": "05-frames-and-signs/bamboo-frame-wide.png",
+  "he": "מסגרת במבוק רחבה (לתמונה/טקסט)",
+  "w": 1600,
+  "h": 940
+ },
+ {
+  "file": "05-frames-and-signs/bamboo-frame-square.png",
+  "he": "מסגרת במבוק מרובעת",
+  "w": 1500,
+  "h": 1500
+ },
+ {
+  "file": "05-frames-and-signs/scroll-horizontal.png",
+  "he": "מגילה אופקית",
+  "w": 1600,
+  "h": 560
+ },
+ {
+  "file": "05-frames-and-signs/scroll-vertical.png",
+  "he": "מגילה אנכית (לרשימות)",
+  "w": 1140,
+  "h": 1560
+ },
+ {
+  "file": "05-frames-and-signs/stone-tablet.png",
+  "he": "לוח אבן",
+  "w": 1800,
+  "h": 1200
+ },
+ {
+  "file": "05-frames-and-signs/ribbon-orange.png",
+  "he": "סרט כותרת כתום",
+  "w": 1600,
+  "h": 400
+ },
+ {
+  "file": "05-frames-and-signs/ribbon-blue.png",
+  "he": "סרט כותרת כחול",
+  "w": 1600,
+  "h": 400
+ },
+ {
+  "file": "05-frames-and-signs/ribbon-purple.png",
+  "he": "סרט כותרת סגול",
+  "w": 1600,
+  "h": 400
+ },
+ {
+  "file": "05-frames-and-signs/round-badge-wood.png",
+  "he": "עיגול עץ (למספרים)",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "05-frames-and-signs/round-badge-orange.png",
+  "he": "עיגול כתום",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "05-frames-and-signs/round-badge-blue.png",
+  "he": "עיגול כחול",
+  "w": 600,
+  "h": 600
+ },
+ {
+  "file": "05-frames-and-signs/leaf-wreath-frame.png",
+  "he": "מסגרת עלים עגולה",
+  "w": 900,
+  "h": 900
+ }
+]
