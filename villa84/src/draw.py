@@ -41,12 +41,12 @@ def _frame(o):
     return dict(a=y0, b=y1, f0=x0, f1=x1, pt=lambda s, t: (t, s))
 
 
-def _leaf(c, f, hinge_s, tip_s, face, out):
+def _leaf(c, f, hinge_s, tip_s, face, out, layer="DOOR"):
     """Door leaf standing open at 90 degrees from the hinge, and its swing arc back to the closed position."""
     pt = f["pt"]
     w = abs(tip_s - hinge_s)
     tip = face + out * w
-    c.line(pt(hinge_s, face), pt(hinge_s, tip), "DOOR", w=0.3)
+    c.line(pt(hinge_s, face), pt(hinge_s, tip), layer, w=0.3)
     # arc: centre at the hinge, from the open leaf to the far jamb
     cx, cy = pt(hinge_s, face)
     ex, ey = pt(tip_s, face)
@@ -70,15 +70,16 @@ def opening_symbol(c, o):
         face = f1 if sw > 0 else f0
         c.line(pt(a, f0), pt(a, f1), "DOOR-T")
         c.line(pt(b, f0), pt(b, f1), "DOOR-T")
+        lay = "GLASS" if o.get("glass") else "DOOR"
         if k == "door":
             if o.get("hinge", "a") == "a":
-                _leaf(c, f, a, b, face, sw)
+                _leaf(c, f, a, b, face, sw, lay)
             else:
-                _leaf(c, f, b, a, face, sw)
+                _leaf(c, f, b, a, face, sw, lay)
         else:
             m = (a + b) / 2
-            _leaf(c, f, a, m, face, sw)
-            _leaf(c, f, b, m, face, sw)
+            _leaf(c, f, a, m, face, sw, lay)
+            _leaf(c, f, b, m, face, sw, lay)
         if o.get("blast"):
             c.poly([pt(a, f0), pt(b, f0), pt(b, f1), pt(a, f1)], "DOOR", w=0.45)
     elif k in ("win", "fixed"):
@@ -188,7 +189,7 @@ def labels(c, fl, compact=False):
         small = a < 6.0
         h = (0.2 if small else TXT_NAME) * (0.9 if compact else 1.0)
         q = min(r["rects"], key=lambda q: (abs((q[0] + q[2]) / 2 - x) + abs((q[1] + q[3]) / 2 - y)))
-        narrow = (q[2] - q[0]) < 1.8 and (q[3] - q[1]) > (q[2] - q[0])
+        narrow = (q[2] - q[0]) < 2.1 and (q[3] - q[1]) > (q[2] - q[0])
         if small:
             c.text((x, y + 0.12), r["name"], "TEXT", h=h, bold=True)
             c.text((x, y - 0.18), f"{a:.1f}", "TEXT-S", h=0.15)
@@ -368,6 +369,14 @@ def _terrace(c, below=False):
     c.rect(tx0, ty0, tx1, ty1, "PAVE", fill="deck")
     for r in ((tx0, ty0, g0 - 0.15, ty0 + 0.8), (g1 + 0.15, ty0, tx1, ty0 + 0.8), (tx0, ty0 + 0.8, tx0 + 0.8, ty1)):
         c.rect(*r, "GREEN", fill="green")
+    px0, py0, px1, py1 = M.PATIO
+    c.rect(px0 - 0.3, py0 - 0.3, px1, py1 + 0.3, "GREEN", fill="green")          # planters around the opening
+    c.rect(px0, py0, px1, py1, "OUT", fill="white")
+    c.rect(px0 + 0.05, py0 + 0.05, px1 - 0.05, py1 - 0.05, "OUT", dash="2 1", w=0.3)
+    c.text(((px0 + px1) / 2, (py0 + py1) / 2), "פתח פטיו אל המרתף", "TEXT-S", h=0.17)
+    for x0, y0, x1, y1 in M.SKYLIGHTS:
+        c.rect(x0, y0, x1, y1, "GLASS", fill="glass")
+    c.text((11.4, 19.5), "פס רצפת זכוכית, אור למרתף", "TEXT-S", h=0.15)
     c.text(((tx0 + tx1) / 2 - 3.0, 16.4), "מרפסת גג", "TEXT", h=0.3, bold=True)
     c.text(((tx0 + tx1) / 2 - 3.0, 15.9), "מעל החניון והמרתף", "TEXT-S", h=0.2)
 
@@ -396,7 +405,24 @@ def outdoor(c, fl):
         c.text((2.5, 30.5), "כניסת לקוחות מהרחוב", "TEXT-S", h=0.17, rot=90)
         ex0, ey0, ex1, ey1 = M.ENGLISH_COURT
         c.rect(ex0, ey0, ex1, ey1, "PAVE", fill="pave")
-        c.text(((ex0 + ex1) / 2, (ey0 + ey1) / 2), "חצר אנגלית (שקועה, בגובה המרתף)", "TEXT-S", h=0.2)
+        c.text((12.0, (ey0 + ey1) / 2), "חצר אנגלית שקועה, בגובה המרתף · אור ואוויר לסטודיו, לשירותים, למטבחון ולמקלט", "TEXT-S", h=0.2)
+        px0, py0, px1, py1 = M.PATIO
+        c.rect(px0, py0, px1, py1, "GREEN", fill="green")
+        c.circle(((px0 + px1) / 2 + 0.6, (py0 + py1) / 2), 0.9, "TREE", fill="tree")
+        c.text(((px0 + px1) / 2 - 0.9, (py0 + py1) / 2 + 0.25), "פטיו", "TEXT", h=0.26, bold=True)
+        c.text(((px0 + px1) / 2 - 0.9, (py0 + py1) / 2 - 0.25), "פתוח לשמיים", "TEXT-S", h=0.17)
+        for x0, y0, x1, y1 in M.SKYLIGHTS:
+            c.rect(x0, y0, x1, y1, "CEIL", dash="4 2")
+        c.text((11.4, 17.95), "חלונות גג במרפסת שמעל", "CEIL", h=0.15)
+        r = M.OFFICE_RAMP
+        for x0, y0, x1, y1 in r["landings"]:
+            c.rect(x0, y0, x1, y1, "PAVE", fill="pave")
+        for x0, y0, x1, y1, d in r["runs"]:
+            c.rect(x0, y0, x1, y1, "STAIR")
+            xm = (x0 + x1) / 2
+            ya, yb = (y1 - 0.2, y0 + 0.2) if d < 0 else (y0 + 0.2, y1 - 0.2)
+            _walk(c, [(xm, ya), (xm, yb)], "")
+        c.text((2.3, 21.6), "רמפה נגישה 1:12 מהשער ברחוב", "TEXT-S", h=0.15)
         _ext_stair(c)
         level_mark(c, (8.2, 10.0), -3.50)
         level_mark(c, (2.4, 21.0), -3.50)
@@ -460,30 +486,35 @@ def fixtures(c, fl):
     """Built-in items drawn on every plan: parking bays, sanitary ware, kitchens, closets."""
     if fl == "B":
         _bays(c)
-        # office WC and kitchenette (23.8-27.2 x 20.9-27.71): accessible WC at the south, a WC, basins, kitchenette at the door
-        _partition(c, [(23.8, 23.1), (24.0, 23.1)], [(24.95, 23.1), (27.2, 23.1)], 0.1)          # accessible WC 3.40 x 2.20
-        _door_mark(c, (24.0, 23.15), (24.95, 23.15), -1)
-        place(c, S.wc(), 27.2, 22.0, 90)
-        place(c, S.basin(), 25.4, 20.9, 0)
-        c.text((24.6, 21.7), "תא נגיש", "TEXT-S", h=0.15)
-        _partition(c, [(25.75, 23.2), (25.75, 23.4)], [(25.75, 24.25), (25.75, 24.9)], 0.1)       # WC 1.45 x 1.70
-        _partition(c, [(25.75, 24.9), (27.2, 24.9)], [], 0.1)
-        _door_mark(c, (25.8, 23.4), (25.8, 24.25), -1, axis="V")
-        place(c, S.wc(), 27.2, 24.05, 90)
-        place(c, S.basin(0.55, 0.42), 23.8, 24.2, -90)
-        place(c, S.counter(2.5, sink=0.9), 27.2, 25.1, 90)
-        place(c, S.shelf(1.8, 0.4), 23.8, 27.55, -90)
+        # office WCs under the mamad tower (17.3-19.75 x 29.31-33.7): accessible cubicle by the window, a WC, basin
+        _partition(c, [(17.3, 31.2), (17.45, 31.2)], [(18.4, 31.2), (19.75, 31.2)], 0.1)
+        _door_mark(c, (18.4, 31.25), (17.45, 31.25), -1)
+        place(c, S.wc(), 17.3, 32.35, -90)
+        place(c, S.basin(), 18.95, 33.7, 180)
+        c.circle((18.65, 32.4), 0.75, "FIX", dash="2 2")
+        c.text((18.75, 31.5), "תא נגיש", "TEXT-S", h=0.13)
+        _partition(c, [(18.65, 29.31), (18.65, 30.15)], [(18.65, 30.9), (18.65, 31.2)], 0.1)
+        _door_mark(c, (18.7, 30.15), (18.7, 30.9), -1, axis="V")
+        place(c, S.wc(), 19.75, 29.95, 90)
+        place(c, S.basin(0.55, 0.42), 17.3, 30.75, -90)
+        # kitchenette (19.9-22.2 x 29.31-33.7)
+        place(c, S.counter(2.6, sink=1.3), 22.2, 29.6, 90)
+        place(c, S.tall_units(0.9, 0.65, fridge=0.9), 22.2, 32.4, 90)
         # storage shelving
         place(c, S.shelf(4.6, 0.6), 17.15, 17.35, -90)
         place(c, S.shelf(2.7, 0.6), 20.3, 12.75, 90)
         place(c, S.shelf(1.9, 0.6), 17.75, 12.5, 0)
-        # systems room
-        place(c, S.tank(0.45), 24.6, 18.35)
-        place(c, S.tank(0.45), 25.6, 18.35)
-        c.rect(26.45, 18.0, 27.2, 20.4, "FIX")
-        c.text((26.82, 19.2), "לוח חשמל", "TEXT-S", h=0.13, rot=90)
+        # systems room (24.5-27.2 x 21.05-27.71)
+        place(c, S.tank(0.45), 25.35, 26.9)
+        place(c, S.tank(0.45), 26.45, 26.9)
+        c.rect(26.5, 23.4, 27.2, 25.6, "FIX")
+        c.text((26.85, 24.5), "לוח חשמל", "TEXT-S", h=0.13, rot=90)
         # closet
         place(c, S.shelf(1.9, 0.6), 20.25, 24.55)
+        # shared shelter: emergency cabinet and folding benches along the walls
+        place(c, S.shelf(1.6, 0.5), 22.35, 33.5, -90)
+        for x0, y0, x1, y1 in ((22.4, 29.25, 22.85, 31.7), (24.25, 27.9, 26.6, 28.35)):
+            c.rect(x0, y0, x1, y1, "FIX", dash="3 2")
     elif fl == "G":
         pass
     else:
@@ -498,18 +529,18 @@ def furniture(c, fl):
         # cinema: screen on the east wall, two rows of four, seats face east
         c.line((27.05, 13.2), (27.05, 16.85), "FIX", w=0.5)
         c.text((26.75, 15.0), "מסך", "TEXT-S", h=0.15, rot=90)
-        for row, xr in enumerate((22.0, 23.35)):
+        for xr in (22.0, 23.35):
             for j in range(4):
-                place(c, S.cinema_seat(), xr, 13.45 + j * 0.85 + (0.0 if row == 0 else 0.0), -90)
+                place(c, S.cinema_seat(), xr, 13.45 + j * 0.85, -90)
         place(c, S.rug(2.4, 3.6), 24.9, 15.0)
-        # family lobby: bench and shoe cabinet
-        place(c, S.bench(1.6, 0.42), 17.15, 19.3, -90)
-        place(c, S.console(1.4, 0.38), 17.15 + 0.0, 21.0, -90)
+        # family lobby
+        place(c, S.bench(1.6, 0.42), 17.15, 21.1, -90)
+        place(c, S.plant(0.3), 21.75, 18.15)
         # meeting room
-        place(c, S.dining(3.0, 1.1, per_side=4, ends=True), 8.4, 21.0)
+        place(c, S.dining(3.0, 1.1, per_side=4, ends=True), 8.4, 21.45)
         # principal architect
         place(c, S.desk(1.8, 0.8), 15.4, 21.6, 90)
-        place(c, S.shelf(3.6, 0.4), 17.0, 19.4, 90)
+        place(c, S.shelf(3.6, 0.4), 17.0, 19.6, 90)
         place(c, S.round_table(0.5), 12.4, 22.4)
         for ang in (-30, 90, 210):
             place(c, S.chair(), 12.4 + 0.75 * math.cos(math.radians(ang)), 22.4 + 0.75 * math.sin(math.radians(ang)), ang + 90)
@@ -518,7 +549,7 @@ def furniture(c, fl):
         place(c, S.sofa(2.0, 0.85, seats=2), 6.3, 23.75, 0)
         place(c, S.round_table(0.3), 7.3, 25.0)
         place(c, S.plant(0.3), 10.6, 24.2)
-        # studio: ten desks in two rows facing the windows, plus plotter and plan chests
+        # studio: ten desks in two rows, plotter, plan chests and a work table
         for j in range(5):
             x = 6.9 + j * 1.9
             place(c, S.desk(1.6, 0.75), x, 31.0, 0)
@@ -529,13 +560,14 @@ def furniture(c, fl):
         for dx in (-0.6, 0.6):
             for sy in (-1, 1):
                 place(c, S.chair(), 14.2 + dx, 26.0 + sy * 0.95, 90 + 90 * sy)
-        # workshop and materials
-        place(c, S.table(3.0, 1.2, mat="wood"), 23.4, 30.95)
-        place(c, S.shelf(4.0, 0.5), 27.2, 29.6, 90)
-        place(c, S.rack(1.8, 0.5), 20.0, 33.7, -90 + 180)
-        place(c, S.counter(2.2, sink=0.6), 19.9, 31.0, -90)
-        # shelter
-        place(c, S.shelf(3.6, 0.45), 17.3, 29.5 + 3.6, -90)
+        # kitchenette table by the window
+        place(c, S.table(1.2, 0.7), 20.75, 32.75)
+        for dx in (-0.3, 0.3):
+            place(c, S.chair(), 20.75 + dx, 32.1, 0)
+        # shared shelter, day use: model workshop and materials library
+        place(c, S.table(1.1, 2.6, mat="wood"), 24.7, 30.7)
+        place(c, S.shelf(5.2, 0.5), 27.2, 28.2, 90)
+        place(c, S.rack(1.4, 0.5), 23.95, 33.7, 180)
     elif fl == "G":
         pass
     else:

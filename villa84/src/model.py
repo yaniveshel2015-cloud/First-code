@@ -53,26 +53,29 @@ def room(floor, rid, name, rects, cat="עיקרי", group="", label=None, note="
 
 
 # ---- B, -3.50: architects' office, parking and the family part
-g_park, g_fam, g_off, g_core = "חניון", "חלק משפחתי", "משרד אדריכלים", "תנועה אנכית"
-room("B", "B01", "חניון", (5.8, 12.5, 17.0, 18.9), "שירות", g_park, label=(11.4, 18.3),
-     note="4 מקומות חניה 2.80×5.20, בלי מעבר נסיעה. מאחורי הרכבים מעבר הליכה 1.20")
+g_park, g_fam, g_off, g_core, g_shared = "חניון", "חלק משפחתי", "משרד אדריכלים", "תנועה אנכית", "משותף למשפחה ולמשרד"
+room("B", "B01", "חניון", (5.8, 12.5, 17.0, 19.2), "שירות", g_park, label=(11.4, 18.45),
+     note="4 מקומות חניה 2.80×5.20, בלי מעבר נסיעה. מאחורי הרכבים מעבר הליכה 1.50 עם חלונות גג")
+room("B", "B05", "לובי משפחתי", (17.15, 17.7, 22.2, 22.2), "שירות", g_fam, label=(19.4, 20.1),
+     note="נכנסים מהחניון בדלת זכוכית כפולה. המעלית נפתחת אל הלובי, קיר זכוכית אל הפטיו")
+room("B", "B15", "מעבר משפחה", [(22.35, 21.05, 24.35, 27.71), CORE_BAND], "שירות", g_fam, label=(23.35, 24.4),
+     note="אל המדרגות, המעלית, חדר המערכות והמקלט. קיר זכוכית אל הפטיו")
 room("B", "B02", "מחסן", (17.15, 12.5, 20.3, 17.55), "שירות", g_fam)
-room("B", "B03", "חדר מערכות", (22.35, 17.7, 27.2, 20.75), "שירות", g_fam, note="משאבות, דוד, לוח חשמל ראשי")
 room("B", "B04", "חדר קולנוע", (20.45, 12.5, 27.2, 17.55), "עיקרי", g_fam, label=(25.2, 16.75), note="8 מושבים בשתי שורות, בלי חלונות")
-room("B", "B05", "לובי משפחתי", (17.15, 17.7, 22.2, 22.2), "שירות", g_fam, note="יוצאים מהרכב ונכנסים ישר ללובי, המעלית נפתחת אליו")
-room("B", "B15", "מעבר למדרגות", [(22.35, 20.9, 23.65, 27.71), CORE_BAND], "שירות", g_fam, label=(23.0, 24.6))
+room("B", "B03", "חדר מערכות", (24.5, 21.05, 27.2, 27.71), "שירות", g_fam, label=(25.85, 25.0), note="משאבות, דוד, לוח חשמל ראשי. תריס אוורור אל הפטיו")
 room("B", "B16", "ארון", (20.2, 24.5, 22.2, 26.26), "שירות", g_fam)
 room("B", "B06", "מדרגות", STAIR_RECT, "שירות", g_core, note="2 מהלכים ברוחב 1.30")
 room("B", "B07", "מעלית", ELEV_RECT, "שירות", g_core, note="פיר 2.00×2.00, דלת לכל צד")
-room("B", "B08", "חדר ישיבות", (5.8, 19.05, 11.0, 23.6), "עיקרי", g_off, label=(8.4, 22.95), note="חלון לחצר המשרד וקיר זכוכית אל מעבר החניון")
-room("B", "B09", "חדר אדריכל ראשי", (11.15, 19.05, 17.0, 23.6), "עיקרי", g_off, label=(13.4, 19.95), note="קיר זכוכית אל מעבר החניון")
-room("B", "B13", "קבלה והמתנה", (5.8, 23.75, 11.0, 27.6), "עיקרי", g_off, label=(8.6, 25.55), note="כניסת לקוחות מחצר המשרד")
+room("B", "B14", "מקלט משותף", (22.35, 27.86, 27.2, 33.7), "שירות", g_shared, label=(24.8, 32.55),
+     note="לכ־25 איש: המשפחה, צוות המשרד ואורחים. 2 דלתות הדף וחלון הדף לחצר האנגלית. ביום־יום סדנת המודלים והחומרים של המשרד")
+room("B", "B08", "חדר ישיבות", (5.8, 19.35, 11.0, 23.6), "עיקרי", g_off, label=(8.4, 23.1), note="חלון לחצר המשרד וקיר זכוכית אל מעבר החניון")
+room("B", "B09", "חדר אדריכל ראשי", (11.15, 19.35, 17.0, 23.6), "עיקרי", g_off, label=(13.4, 20.15), note="קיר זכוכית אל מעבר החניון ואל הסטודיו")
+room("B", "B13", "קבלה והמתנה", (5.8, 23.75, 11.0, 27.6), "עיקרי", g_off, label=(8.6, 25.55), note="כניסת לקוחות בדלת זכוכית כפולה מחצר המשרד, עם רמפה נגישה מהרחוב")
 room("B", "B10", "סטודיו פתוח", [(5.8, 27.75, 17.15, 33.7), (11.15, 23.75, 17.15, 27.75)], "עיקרי", g_off,
-     label=(10.6, 30.0), note="10 עמדות עבודה, אור מהחצר המערבית ומהחצר האנגלית")
-room("B", "B17", "מסדרון משרד", (17.3, 27.86, 27.2, 29.16), "שירות", g_off)
-room("B", "B14", "מרחב מוגן", TOWER, "שירות", g_off, note="ביום־יום ארכיון")
-room("B", "B11", "סדנת מודלים וחומרים", (19.9, 29.31, 27.2, 33.7), "עיקרי", g_off, label=(23.4, 32.75), note="אור מהחצר האנגלית")
-room("B", "B12", "שירותים ומטבחון", (23.8, 20.9, 27.2, 27.71), "שירות", g_off, label=(25.15, 26.45), note="תא נגיש, תא רגיל ומטבחון")
+     label=(10.6, 30.0), note="10 עמדות עבודה, אור מחצר המשרד ומהחצר האנגלית")
+room("B", "B17", "מסדרון משרד", (17.3, 27.86, 22.2, 29.16), "שירות", g_off, note="אל השירותים, המטבחון והמקלט")
+room("B", "B12", "שירותים", TOWER, "שירות", g_off, label=(18.05, 29.85), note="תא נגיש (ת״י 1918) ותא רגיל, חלון לחצר האנגלית. מתחת לממ״ד, בתוך המגדל המחוזק")
+room("B", "B18", "מטבחון", (19.9, 29.31, 22.2, 33.7), "שירות", g_off, label=(21.05, 30.0), note="חלון לחצר האנגלית")
 
 # ---- G, +-0.00: public part. Stage 2 will lay out these zones in detail.
 g_pub, g_svc, g_spa = "מגורים ואירוח", "שירות", "ביתן ספא"
@@ -125,32 +128,41 @@ BS = (12.2, 12.5)                   # basement south wall band
 # ---- B
 H("B", 6.1, 11.1, *BS, "garage")
 H("B", 11.7, 16.7, *BS, "garage")
-Vv("B", 17.75, 18.75, 17.0, 17.15, "door", hinge="a", swing=1)                    # parking -> family lobby
-H("B", 6.0, 10.8, 18.9, 19.05, "fixed", sill=0.9, head=2.7)                       # glass to the parking walkway
-H("B", 11.35, 16.8, 18.9, 19.05, "fixed", sill=0.9, head=2.7)
+# family side
+Vv("B", 17.75, 19.15, 17.0, 17.15, "door2", swing=1, glass=True)                 # parking -> family lobby, glazed double door 1.40
 H("B", 18.9, 19.8, 17.55, 17.7, "door", hinge="b", swing=-1)                     # lobby -> storage
 H("B", 20.8, 21.9, 17.55, 17.7, "door2", swing=-1)                                # lobby -> cinema
-Vv("B", 17.95, 18.85, 22.2, 22.35, "door", hinge="a", swing=1)                    # lobby -> systems
-Vv("B", 20.9, 22.2, 22.2, 22.35, "open")                                          # lobby -> passage to the stair
 H("B", 20.7, 21.7, 22.2, 22.35, "elev")                                           # lift door (south)
+Vv("B", 21.05, 22.2, 22.2, 22.35, "open")                                         # lobby -> family passage
+Vv("B", 18.0, 20.6, 22.2, 22.5, "fixed")                                          # lobby -> patio, glass wall
+H("B", 22.6, 24.25, 20.75, 21.05, "fixed")                                        # passage -> patio, glass wall
+H("B", 24.9, 26.8, 20.75, 21.05, "win", sill=1.8, head=2.6)                       # systems: louvre to the patio
+Vv("B", 22.2, 23.1, 24.35, 24.5, "door", hinge="a", swing=1)                      # passage -> systems
 H("B", 20.75, 21.65, 26.26, 26.41, "door", hinge="b", swing=1)                   # closet
-# office
-Vv("B", 24.3, 25.3, *WF, "door", hinge="a", swing=1)                              # client entrance from the office court
-Vv("B", 25.6, 27.3, *WF, "fixed", head=2.7)
-Vv("B", 19.5, 23.2, *WF, "fixed", sill=0.6, head=2.7)                             # meeting room window to the court
-Vv("B", 28.2, 33.3, *WF, "fixed", head=2.7)                                       # studio, west
+H("B", 23.0, 24.0, 27.71, 27.86, "door", hinge="a", swing=-1, blast=True)          # passage -> shared shelter (family door)
+# office side
+Vv("B", 24.75, 26.55, *WF, "door2", swing=1, glass=True, head=2.7)                # client entrance, glazed double door 1.80
+Vv("B", 23.95, 24.6, *WF, "fixed", head=2.7)
+Vv("B", 26.7, 27.45, *WF, "fixed", head=2.7)
+Vv("B", 19.6, 23.4, *WF, "fixed", sill=0.6, head=2.7)                             # meeting room window to the court
+Vv("B", 28.0, 33.45, *WF, "fixed", head=2.9)                                      # studio, west, floor to ceiling
+H("B", 6.0, 10.8, 19.2, 19.35, "fixed", sill=0.9, head=2.7)                       # glass to the parking walkway
+H("B", 11.35, 16.8, 19.2, 19.35, "fixed", sill=0.9, head=2.7)
 H("B", 6.3, 10.9, *NF, "win", sill=0.9, head=2.7)                                 # studio, north (English court)
 H("B", 11.6, 16.6, *NF, "win", sill=0.9, head=2.7)
-H("B", 17.95, 19.05, *NF, "win", sill=1.2, head=2.2, blast=True)                  # shelter
-H("B", 20.4, 23.3, *NF, "win", sill=0.9, head=2.7)                                # workshop
+H("B", 17.9, 19.15, *NF, "win", sill=1.6, head=2.5)                               # WC, high window
+H("B", 20.3, 21.8, *NF, "win", sill=1.05, head=2.6)                               # kitchenette
+H("B", 24.15, 25.45, *NF, "win", sill=1.2, head=2.2, blast=True)                  # shelter, blast window and escape
 H("B", 9.2, 10.2, 23.6, 23.75, "door", hinge="b", swing=-1)                      # reception -> meeting
-Vv("B", 24.1, 27.3, 11.0, 11.15, "open")                                          # reception -> studio
+Vv("B", 23.9, 25.8, 11.0, 11.15, "fixed")                                         # reception | studio glass wall
+Vv("B", 25.95, 27.45, 11.0, 11.15, "door2", swing=1, glass=True)
+H("B", 6.0, 10.9, 27.6, 27.75, "fixed", sill=0.0)
 H("B", 15.65, 16.6, 23.6, 23.75, "door", hinge="b", swing=-1)                    # studio -> principal
-H("B", 11.5, 15.3, 23.6, 23.75, "fixed", sill=0.9, head=2.7)
+H("B", 11.5, 15.3, 23.6, 23.75, "fixed")                                          # principal | studio glass wall
 Vv("B", 27.86, 29.16, 17.15, 17.3, "open")                                        # studio -> office corridor
-H("B", 18.05, 18.95, 29.16, 29.31, "door", hinge="a", swing=1, blast=True)        # shelter
-H("B", 21.3, 22.9, 29.16, 29.31, "door2", swing=1)                                # workshop
-H("B", 24.2, 25.1, 27.71, 27.86, "door", hinge="a", swing=-1)                    # WC and kitchenette
+H("B", 17.5, 18.4, 29.16, 29.31, "door", hinge="a", swing=1)                      # WC
+H("B", 20.4, 21.7, 29.16, 29.31, "open")                                          # kitchenette
+Vv("B", 28.0, 29.0, 22.2, 22.35, "door", hinge="b", swing=-1, blast=True)          # corridor -> shared shelter (office door)
 
 # ---- core openings on every floor
 for fl in "BGF":
@@ -159,8 +171,8 @@ for fl in "GF":
     H(fl, 20.7, 21.7, 24.35, 24.5, "elev")                                        # lift door (north)
 
 # ---- G (zones; stage 2)
-H("G", 22.6, 24.0, *SF, "door", hinge="a", swing=1, head=2.6)                     # front door, in line with the entrance stair
-H("G", 24.4, 26.8, *SF, "fixed", head=2.6)
+H("G", 22.6, 24.4, *SF, "door2", swing=1, glass=True, head=2.6)                  # front door, glazed double door 1.80
+H("G", 24.55, 26.8, *SF, "fixed", head=2.6)
 H("G", 6.1, 16.9, *SF, "slide", head=2.7)                                         # kitchen and dining to the terrace
 Vv("G", 23.6, 27.3, *WF, "win", sill=0.9, head=2.7)
 H("G", 6.3, 11.6, *NF, "win", sill=0.9, head=2.7)
@@ -185,6 +197,7 @@ H("G", 46.5, 47.3, 31.0, 31.15, "door")
 H("G", 49.0, 49.8, 28.4, 28.55, "door")
 H("G", 49.0, 49.8, 31.0, 31.15, "door")
 Vv("G", 23.6, 27.4, 50.7, 51.0, "win", sill=1.5, head=2.5)
+Vv("G", 29.0, 30.5, 50.7, 51.0, "win", sill=1.7, head=2.4)
 H("G", 46.6, 49.9, *NF, "win", sill=1.2, head=2.5)
 
 # ---- F (zones; stage 3)
@@ -212,7 +225,12 @@ TERRACE_GATE = (22.6, 24.0)
 BALCONIES = [(5.8, 20.25, 16.2, 22.05), (22.15, 20.25, 27.2, 22.05)]
 EXT_STAIR = dict(x0=16.9, x1=22.6, y0=10.7, y1=12.2, n=19, tread=0.30, risers=20, z0=-3.50, z1=0.0)
 EXT_LANDING = (22.6, 10.7, 24.0, 12.2)
-ENGLISH_COURT = (5.5, 34.0, 23.6, 36.2)
+ENGLISH_COURT = (5.5, 34.0, 27.5, 36.6)                 # sunken court along the whole north facade, at -3.50
+PATIO = (22.5, 17.85, 27.2, 20.75)                     # open-air light court next to the family lobby, cut through the terrace
+SKYLIGHTS = [(6.0, 17.75, 16.8, 19.15)]                # walkable glass strip in the terrace, over the parking walkway
+# accessible route from the street gate (+86.94) to the office court (+87.50): two runs of 1:12 with landings
+OFFICE_RAMP = dict(runs=[(0.95, 23.4, 2.25, 26.8, -1), (2.4, 23.4, 3.7, 26.8, 1)],
+                   landings=[(0.95, 26.8, 2.25, 28.6), (0.95, 22.0, 3.7, 23.4)], z0=86.94, z1=87.50)
 NORTH_PATH = (27.5, 34.0, 45.5, 35.0)
 OFFICE_COURT = [(0.9, 19.0), (5.5, 19.0), (5.5, 34.0), (0.75, 34.0)]
 
@@ -288,8 +306,14 @@ def openings_of(fl):
     return [o for o in OPENINGS if o["floor"] == fl and o["kind"] != "none"]
 
 
+OUTLINE_HOLES = {"B": [PATIO]}
+
+
 def floor_outline(fl):
-    return unary_union([sbox(*r) for r in OUTLINES[fl]])
+    g = unary_union([sbox(*r) for r in OUTLINES[fl]])
+    for h in OUTLINE_HOLES.get(fl, []):
+        g = g.difference(sbox(*h))
+    return g
 
 
 def gross_area(fl):
@@ -362,7 +386,7 @@ def terrain_z(x, y):
 
 
 # ------------------------------------------------------------------ checks
-CIRC_IDS = {"B15", "B17", "G07", "G09", "F11"}
+CIRC_IDS = {"B05", "B15", "B17", "G07", "G09", "F11"}
 
 
 def dead_pockets(fl, thick=0.36):
@@ -378,8 +402,70 @@ def circulation_share(fl):
     return circ / net if net else 0.0
 
 
+WET_WORDS = ("שירותים", "מקלחת", "מקלחות")
+SHELTER_ID, SHELTER_MIN_AREA = "B14", 25.0
+
+
+def _touching_rooms(o, rooms):
+    g = sbox(*o["rect"]).buffer(0.02)
+    return [r for r in rooms if g.intersects(room_poly(r))]
+
+
+def door_graph(fl):
+    """Rooms connected by doors and open passages (not by glass)."""
+    rs = rooms_of(fl)
+    edges = []
+    for o in openings_of(fl):
+        if o["kind"] in ("door", "door2", "open", "elev"):
+            t = _touching_rooms(o, rs)
+            if len(t) == 2:
+                edges.append((t[0]["id"], t[1]["id"]))
+    return edges
+
+
+def separate_routes():
+    """Family and office rooms in the basement must not connect except through the shared shelter."""
+    fam = {r["id"] for r in rooms_of("B") if r["group"] in ("חניון", "חלק משפחתי", "תנועה אנכית")}
+    off = {r["id"] for r in rooms_of("B") if r["group"] == "משרד אדריכלים"}
+    adj = {}
+    for a, b in door_graph("B"):
+        if SHELTER_ID in (a, b):
+            continue
+        adj.setdefault(a, set()).add(b)
+        adj.setdefault(b, set()).add(a)
+    seen, todo = set(fam), list(fam)
+    while todo:
+        n = todo.pop()
+        for m in adj.get(n, ()):
+            if m not in seen:
+                seen.add(m)
+                todo.append(m)
+    return sorted(seen & off)
+
+
 def validate():
     problems = []
+    # every WC and shower room touches the outside through a window
+    for fl in "BGF":
+        out = unary_union([sbox(*q) for q in OUTLINES[fl]]).boundary          # true facades (the patio is glazed separately)
+        for r in rooms_of(fl):
+            if not any(w in r["name"] for w in WET_WORDS):
+                continue
+            ok = any(o["kind"] in ("win", "fixed") and sbox(*o["rect"]).buffer(0.02).intersects(room_poly(r))
+                     and sbox(*o["rect"]).buffer(0.02).intersects(out) for o in openings_of(fl))
+            if not ok:
+                problems.append(f"{r['id']} {r['name']}: no window to the outside")
+    # shared shelter: size and one door from each side
+    sh = [r for r in ROOMS if r["id"] == SHELTER_ID][0]
+    if room_area(sh) < SHELTER_MIN_AREA:
+        problems.append(f"shelter {room_area(sh):.1f} m2 < {SHELTER_MIN_AREA}")
+    blast = [o for o in openings_of("B") if o.get("blast") and o["kind"] == "door" and sbox(*o["rect"]).buffer(0.02).intersects(room_poly(sh))]
+    sides = {r["group"] for o in blast for r in _touching_rooms(o, rooms_of("B")) if r["id"] != SHELTER_ID}
+    if not ({"חלק משפחתי", "משרד אדריכלים"} <= sides):
+        problems.append(f"shelter doors reach only: {sorted(sides)}")
+    leak = separate_routes()
+    if leak:
+        problems.append(f"family route reaches office rooms {leak} without the shelter")
     for fl in "BGF":
         out = floor_outline(fl)
         rs = rooms_of(fl)

@@ -10,7 +10,7 @@ OUT = sys.argv[1]
 
 # areas of the plan the user approved before (from the delivered program workbook)
 OLD = {
-    "office": 164.0, "parking": 157.1, "family_lobby": 51.1, "cinema": 34.8, "hall_G": 51.1, "corridor_F": 28.3 + 9.0,
+    "office": 164.0 - 9.8, "shelter": 9.8, "parking": 157.1, "family_lobby": 51.1, "cinema": 34.8, "hall_G": 51.1, "corridor_F": 28.3 + 9.0,
 }
 
 sheets = []
@@ -21,13 +21,14 @@ for mode, mode_name, num in (("arch", "תוכנית אדריכלית", "1א"), (
     L = M.LEVELS["B"]
     body = (f'<h2>מפלס</h2><p><span dir="ltr">−3.50 = +87.50</span> מ׳ · גובה 3.20 מ׳ עד תחתית התקרה, {L["clear"]:.2f} מ׳ נטו</p>'
             '<h2>רשימת חללים ושטחים</h2>' + schedule("B") + '<h2>מקרא</h2>' + legend(mode))
-    sheets.append(sheet(svg, panel(f'{L["name"]} · {mode_name}', "שלב 1 לאישור: גרעין חדש ומרתף חדש", 75, num, body)))
+    sheets.append(sheet(svg, panel(f'{L["name"]} · {mode_name}', "שלב 1, מתוקן: מקלט משותף, מעברים נפרדים, אור ואוויר", 75, num, body)))
 
 # ---------------------------------------------------------------- core diagram sheet
 COL = {"office": "#cfe0f5", "family": "#f6d9b8", "service": "#e6e6e6", "park": "#d9d9d9", "core": "#b9a6d6", "circ": "#fff3b0",
-       "live": "#f3e3a3", "bed": "#cfe8c8", "wet": "#bfe6ee", "tower": "#e8a0a0"}
-KIND = {"B01": "park", "B02": "service", "B03": "service", "B04": "family", "B05": "family", "B15": "circ", "B16": "service",
-        "B08": "office", "B09": "office", "B13": "office", "B10": "office", "B17": "circ", "B11": "office", "B12": "office",
+       "live": "#f3e3a3", "bed": "#cfe8c8", "wet": "#bfe6ee", "tower": "#e8a0a0", "circ_f": "#f4b183", "circ_o": "#9dc3e6",
+       "shelter": "#d9534f", "patio": "#cfe2c0"}
+KIND = {"B01": "park", "B02": "service", "B03": "service", "B04": "family", "B05": "circ_f", "B15": "circ_f", "B16": "service",
+        "B08": "office", "B09": "office", "B13": "office", "B10": "office", "B17": "circ_o", "B14": "shelter", "B12": "wet", "B18": "office",
         "G09": "circ", "G01": "live", "G07": "circ", "G03": "live", "G04": "service", "G05": "service", "G08": "wet", "G12": "live",
         "F01": "bed", "F03": "wet", "F05": "bed", "F14": "bed", "F11": "circ", "F08": "bed", "F12": "wet"}
 
@@ -38,18 +39,23 @@ def diagram(fl):
     for r in M.rooms_of(fl):
         if r["id"][0] == "P":
             continue
-        k = "core" if r["id"] in ("B06", "B07", "G10", "G11", "F16", "F17") else ("tower" if r["rects"][0] == M.TOWER else KIND.get(r["id"], "service"))
+        k = "core" if r["id"] in ("B06", "B07", "G10", "G11", "F16", "F17") else ("tower" if fl != "B" and r["rects"][0] == M.TOWER else KIND.get(r["id"], "service"))
         for q in r["rects"]:
             c.items.append(dict(t="poly", pts=[(q[0], q[1]), (q[2], q[1]), (q[2], q[3]), (q[0], q[3])], layer="OUT", closed=True,
                                 fill="d_" + k, holes=[], dash=None, w=0.01))
+    if fl == "B":
+        c.items.append(dict(t="poly", pts=[(M.PATIO[0], M.PATIO[1]), (M.PATIO[2], M.PATIO[1]), (M.PATIO[2], M.PATIO[3]), (M.PATIO[0], M.PATIO[3])],
+                            layer="OUT", closed=True, fill="d_patio", holes=[], dash=None, w=0.01))
+        c.text(((M.PATIO[0] + M.PATIO[2]) / 2, (M.PATIO[1] + M.PATIO[3]) / 2), "פטיו פתוח", "TEXT", h=0.3, bold=True)
     D.stair(c, fl)
     D.lift(c, fl)
+    D.openings(c, fl)
     for r in M.rooms_of(fl):
         if r["id"] in ("B06", "G10", "F16", "B07", "G11", "F17") or r["id"][0] == "P":
             continue
         x, y = D._label_pos(r)
         q = min(r["rects"], key=lambda q: (abs((q[0] + q[2]) / 2 - x) + abs((q[1] + q[3]) / 2 - y)))
-        narrow = (q[2] - q[0]) < 1.8 and (q[3] - q[1]) > (q[2] - q[0])
+        narrow = (q[2] - q[0]) < 2.1 and (q[3] - q[1]) > (q[2] - q[0])
         c.text((x, y + 0.25), r["name"], "TEXT", h=0.3, bold=True, rot=90 if narrow else 0)
         if not narrow:
             c.text((x, y - 0.3), f"{M.room_area(r):.0f} מ״ר", "TEXT-S", h=0.26)
@@ -72,20 +78,22 @@ for vv, t in ((vb, "קומת מרתף −3.50"), (vg, "קומת קרקע ±0.00 
 svg += north_arrow(34, 558) + scale_bar(60, 566, 100, (0, 1, 2, 5, 10))
 # legend chips under the plans
 lx, ly = 8 + 12, 400
-items = [("office", "משרד"), ("family", "חלק משפחתי"), ("park", "חניה"), ("service", "שירות ואחסון"), ("circ", "מעברים"),
-         ("core", "מדרגות ומעלית"), ("tower", "מגדל מחוזק: מרחב מוגן, מזווה, ממ״ד"), ("live", "מגורים"), ("bed", "חדרי שינה"), ("wet", "חדרים רטובים")]
+items = [("office", "משרד"), ("circ_o", "מעבר המשרד"), ("family", "חלק משפחתי"), ("circ_f", "מעבר המשפחה"), ("shelter", "מקלט משותף"),
+         ("park", "חניה"), ("service", "שירות ואחסון"), ("core", "מדרגות ומעלית"), ("tower", "מזווה וממ״ד (מגדל מחוזק)"), ("patio", "פטיו"),
+         ("live", "מגורים"), ("bed", "חדרי שינה"), ("wet", "שירותים ומקלחות"), ("circ", "מעברים בקומות")]
 for i, (k, t) in enumerate(items):
     x = lx + (i % 5) * 92
     y = ly + (i // 5) * 12
     svg += f'<rect x="{x + 80:.1f}" y="{y:.1f}" width="9" height="6" fill="{COL[k]}" stroke="#555" stroke-width="0.2"/>'
-    svg += f'<text class="t" x="{x + 78:.1f}" y="{y + 4.8:.1f}" font-size="4.2" text-anchor="end">{esc(t)}</text>'
+    svg += f'<text class="t" x="{x + 78:.1f}" y="{y + 4.8:.1f}" font-size="4.2" text-anchor="start">{esc(t)}</text>'
 
 a = {r["id"]: M.room_area(r) for r in M.ROOMS}
 office = sum(M.room_area(r) for r in M.rooms_of("B") if r["group"] == "משרד אדריכלים")
 rows = [
     ("משרד אדריכלים, כולל מסדרון", OLD["office"], office),
+    ("מקלט משותף (ביום־יום סדנת המשרד)", OLD["shelter"], a["B14"]),
     ("חניון", OLD["parking"], a["B01"]),
-    ("לובי משפחתי ומעבר למדרגות", OLD["family_lobby"], a["B05"] + a["B15"]),
+    ("לובי ומעבר המשפחה", OLD["family_lobby"], a["B05"] + a["B15"]),
     ("חדר קולנוע", OLD["cinema"], a["B04"]),
     ("מבואת כניסה בקומת הקרקע", OLD["hall_G"], a["G09"]),
     ("מסדרון ומעבר הלבשה בקומה א׳", OLD["corridor_F"], a["F11"]),
@@ -98,15 +106,22 @@ gross = sum(M.gross_area(f) for f in "BGF")
 body = ('<h2>מה זז</h2><ul>'
         '<li>המדרגות והמעלית עברו מהפינה הצפון־מזרחית לאמצע הבניין, בצד הדרומי. הן עומדות אחת מעל השנייה בשלוש הקומות.</li>'
         '<li>במרתף: יוצאים מהרכב ונכנסים ישר ללובי המשפחתי. המעלית נפתחת אל הלובי (דלת מכל צד).</li>'
+        '<li>מקלט משותף של 28 מ״ר, לכ־25 איש. דלת הדף מהמעבר של המשפחה, דלת הדף מהמסדרון של המשרד, וחלון הדף לחצר האנגלית. ביום־יום זו סדנת המודלים של המשרד.</li>'
+        '<li>שני מעברים נפרדים: המשפחה (כתום) והמשרד (כחול). הם נפגשים רק במקלט.</li>'
+        '<li>שירותי המשרד והמטבחון עם חלונות לחצר האנגלית. יש תא נגיש ותא רגיל.</li>'
+        '<li>אור ואוויר: פטיו פתוח לשמיים ליד הלובי, חלונות גג מעל מעבר החניון, חצר אנגלית לאורך כל החזית הצפונית, וקירות זכוכית במשרד.</li>'
+        '<li>דלתות כניסה רחבות ומזוגגות: משרד 1.80 עם רמפה נגישה מהשער, משפחה מהחניון 1.40, כניסה ראשית לבית 1.80.</li>'
         '<li>בקומת הקרקע: דלת הכניסה בדיוק מול מדרגות הכניסה מהרחבה. המבואה צמודה למדרגות, למעלית ולסלון.</li>'
         '<li>בקומה א׳: שלושה חדרי שינה פונים אל המרפסות בדרום (הורים, נוער 1, הילד הצעיר). חדר נוער 2 פונה צפונה.</li>'
-        '<li>מגדל מחוזק אחד מעל השני: מרחב מוגן של המשרד, מזווה, ממ״ד.</li></ul>'
+        '<li>מגדל מחוזק אחד מעל השני: שירותי המשרד במרתף, מזווה בקרקע, ממ״ד בקומה א׳.</li></ul>'
         '<h2>שטחים לפני ואחרי (מ״ר)</h2>' + tbl +
         '<h2>סיכום קומות (מ״ר)</h2><table><tr><th>קומה</th><th>נטו</th><th>ברוטו</th><th>מעברים</th></tr>' + fl_rows +
         f'<tr class="tot"><td>סה״כ ברוטו</td><td></td><td class="n">{gross:,.0f}</td><td></td></tr></table>'
         '<p class="note" style="margin-top:2mm">מעברים: מסדרונות ומבואות, באחוזים מהשטח נטו של הקומה. היעד: עד 15%. '
-        'השטח ברוטו לא השתנה (קווי המתאר של הקומות נשארו), והוא מתחת ל־1,200 מ״ר.</p>'
-        '<p class="note" style="margin-top:2mm">בדיקה אוטומטית: אין חפיפות בין חדרים, כל הפתחים בתוך קירות, ואין כיסים ריקים בין החדרים.</p>')
+        'השטח ברוטו קטן רק בשטח הפטיו, והוא מתחת ל־1,200 מ״ר.</p>'
+        '<p class="note" style="margin-top:2mm">בדיקה אוטומטית: אין חפיפות בין חדרים, כל הפתחים בתוך קירות ואין כיסים ריקים. לכל חדר שירותים יש חלון החוצה. '
+        'למקלט יש דלת מכל צד, ובלי המקלט אין דרך מהחלק המשפחתי אל המשרד.</p>'
+        '<p class="note" style="margin-top:2mm">את התפוסה המדויקת של המקלט צריך לוודא מול תקנות פיקוד העורף.</p>')
 sheets.append(sheet(svg, panel("גרעין חדש וטבלת שטחים", "מיקום המדרגות והמעלית בשלוש הקומות", 100, "1ג", body)))
 
 doc = (f'<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><title>וילה 84 · שלב 1</title><style>{CSS}</style></head><body>'
