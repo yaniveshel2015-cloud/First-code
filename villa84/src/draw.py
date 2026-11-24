@@ -324,7 +324,8 @@ def exterior_dims(c, fl):
 CHAINS = {
     "B": [("H", 13.3, 5.0, 28.0), ("H", 21.5, 5.0, 28.0), ("H", 24.55, 5.0, 28.0), ("H", 32.85, 5.0, 28.0),
           ("V", 6.55, 12.0, 34.2), ("V", 16.35, 12.0, 34.2), ("V", 22.95, 12.0, 34.2), ("V", 26.25, 12.0, 34.2)],
-    "G": [("H", 24.4, 5.0, 28.0), ("H", 31.0, 5.0, 28.0), ("V", 9.0, 21.8, 34.2), ("V", 15.0, 21.8, 34.2), ("V", 25.8, 21.8, 34.2)],
+    "G": [("H", 22.95, 5.0, 36.3), ("H", 28.5, 5.0, 36.3), ("H", 33.05, 5.0, 36.3),
+          ("V", 6.55, 21.8, 34.2), ("V", 16.4, 21.8, 34.2), ("V", 21.5, 21.8, 34.2), ("V", 26.6, 21.8, 34.2), ("V", 34.9, 21.8, 34.2)],
     "F": [("H", 24.4, 5.0, 28.0), ("H", 31.0, 5.0, 28.0), ("V", 9.0, 21.8, 34.2), ("V", 15.0, 21.8, 34.2), ("V", 25.8, 21.8, 34.2)],
 }
 
@@ -368,17 +369,18 @@ def _terrace(c, below=False):
         return
     c.rect(tx0, ty0, tx1, ty1, "PAVE", fill="deck")
     for r in ((tx0, ty0, g0 - 0.15, ty0 + 0.8), (g1 + 0.15, ty0, tx1, ty0 + 0.8), (tx0, ty0 + 0.8, tx0 + 0.8, ty1)):
-        c.rect(*r, "GREEN", fill="green")
+        c.rect(*r, "PLANT", fill="green")
     px0, py0, px1, py1 = M.PATIO
-    c.rect(px0 - 0.3, py0 - 0.3, px1, py1 + 0.3, "GREEN", fill="green")          # planters around the opening
+    c.poly([(px0 - 0.3, py0 - 0.3), (px1, py0 - 0.3), (px1, py1 + 0.3), (px0 - 0.3, py1 + 0.3)], "PLANT", fill="green",
+           holes=[[(px0, py0), (px1, py0), (px1, py1), (px0, py1)]])                 # planters around the opening
     c.rect(px0, py0, px1, py1, "OUT", fill="white")
     c.rect(px0 + 0.05, py0 + 0.05, px1 - 0.05, py1 - 0.05, "OUT", dash="2 1", w=0.3)
     c.text(((px0 + px1) / 2, (py0 + py1) / 2), "פתח פטיו אל המרתף", "TEXT-S", h=0.17)
     for x0, y0, x1, y1 in M.SKYLIGHTS:
         c.rect(x0, y0, x1, y1, "GLASS", fill="glass")
-    c.text((11.4, 19.5), "פס רצפת זכוכית, אור למרתף", "TEXT-S", h=0.15)
-    c.text(((tx0 + tx1) / 2 - 3.0, 16.4), "מרפסת גג", "TEXT", h=0.3, bold=True)
-    c.text(((tx0 + tx1) / 2 - 3.0, 15.9), "מעל החניון והמרתף", "TEXT-S", h=0.2)
+    c.text((11.4, 18.45), "פס רצפת זכוכית, אור למרתף", "TEXT-S", h=0.15)
+    c.text((20.3, 14.4), "מרפסת גג", "TEXT", h=0.3, bold=True)
+    c.text((20.3, 13.9), "מעל החניון והמרתף", "TEXT-S", h=0.2)
 
 
 def _ext_stair(c, below=False):
@@ -432,12 +434,14 @@ def outdoor(c, fl):
         c.rect(*M.POOL_DECK, "PAVE", fill="deck")
         c.rect(*M.POOL, "WATER", fill="water")
         c.rect(*M.NORTH_PATH, "PAVE", fill="pave")
+        c.rect(*M.BRIDGE, "PAVE", fill="deck")
+        c.text(((M.BRIDGE[0] + M.BRIDGE[2]) / 2, (M.BRIDGE[1] + M.BRIDGE[3]) / 2), "גשר", "TEXT-S", h=0.15)
         for x0, y0, x1, y1 in M.BALCONIES:
             c.rect(x0, y0, x1, y1, "BELOW", dash="4 2")
         ex0, ey0, ex1, ey1 = M.ENGLISH_COURT
         c.rect(ex0, ey0, ex1, ey1, "BELOW", dash="4 2")
         c.poly(M.OFFICE_COURT, "BELOW", dash="4 2")
-        level_mark(c, (9.0, 18.4), 0.0)
+        level_mark(c, (13.6, 15.4), 0.0)
     else:
         _terrace(c, below=True)
         for x0, y0, x1, y1 in M.BALCONIES:
@@ -516,7 +520,28 @@ def fixtures(c, fl):
         for x0, y0, x1, y1 in ((22.4, 29.25, 22.85, 31.7), (24.25, 27.9, 26.6, 28.35)):
             c.rect(x0, y0, x1, y1, "FIX", dash="3 2")
     elif fl == "G":
-        pass
+        # kitchen: counter on the east wall, tall units on the north wall, island
+        place(c, S.counter(3.6, sink=None, hob=1.8), 17.15, 22.6, 90)
+        place(c, S.tall_units(3.0, 0.65, fridge=0.9), 14.4, 29.16, 180)
+        place(c, S.tall_units(1.4, 0.65, fridge=0.0), 17.0, 29.16, 180)
+        # back kitchen
+        place(c, S.counter(3.2, sink=1.6), 16.95, 33.7, 180)
+        place(c, S.shelf(2.2, 0.6), 13.75, 32.9, -90)
+        # pantry: shelves on the east wall and the south part of the west wall
+        place(c, S.shelf(4.1, 0.5), 19.75, 29.5, 90)
+        place(c, S.shelf(1.6, 0.5), 17.3, 31.0, -90)
+        # service and dog room
+        place(c, S.shower(1.2, 1.0), 21.1, 33.7, 180)
+        c.text((20.5, 33.0), "מקלחת לכלב", "TEXT-S", h=0.12)
+        place(c, S.counter(1.6, sink=0.8), 19.9, 31.6, -90)
+        place(c, S.shelf(2.6, 0.5), 25.2, 29.6, 90)
+        # guest WC
+        place(c, S.wc(), 26.3, 33.7, 180)
+        place(c, S.vanity(1.2, 0.5, n=1), 27.2, 29.9, 90)
+        # coat cupboard in the hall
+        place(c, S.wardrobe(2.5, 0.6), 27.05, 27.71, 180)
+        living(c, fixed=True)
+        spa(c, fixed=True)
     else:
         pass
 
@@ -569,9 +594,111 @@ def furniture(c, fl):
         place(c, S.shelf(5.2, 0.5), 27.2, 28.2, 90)
         place(c, S.rack(1.4, 0.5), 23.95, 33.7, 180)
     elif fl == "G":
-        pass
+        # dining for twelve, along the room
+        place(c, S.dining(3.6, 1.1, per_side=5, ends=True), 8.4, 25.6, 90)
+        # kitchen island with bar stools toward the dining
+        place(c, S.island(3.0, 1.1, stools=4, sink=True), 13.9, 25.4, 90)
+        # family and gaming room: sofa facing the TV on the east wall, gaming desk, bean bags
+        place(c, S.tv_unit(2.4, 0.45), 13.6, 31.5, 90)
+        place(c, S.sofa(2.8, 0.95, seats=3), 9.6, 33.0, -90)
+        place(c, S.armchair(0.85, 0.85), 11.3, 33.0, 180)
+        place(c, S.rug(2.6, 2.4), 11.4, 31.5)
+        place(c, S.desk(1.6, 0.7), 6.9, 33.7, 180)
+        place(c, S.beanbag(0.42), 13.0, 30.05)
+        # service room: dog bed
+        place(c, S.rug(0.9, 0.7), 24.4, 30.2)
+        c.text((24.4, 30.2), "מיטת כלב", "TEXT-S", h=0.11)
+        # hall: bench by the lift
+        place(c, S.bench(1.4, 0.4), 22.35, 25.3, -90)
+        living(c, fixed=False)
+        spa(c, fixed=False)
+        terrace_furniture(c)
     else:
         pass
+
+
+# ------------------------------------------------------------------ living room (unchanged; same data as the SketchUp sheets)
+LIV_O = (27.35, 22.35)
+LIV = dict(LIB=(2.20, 6.10, 10.95), MARBLE=[(0.55, 2.20), (6.10, 7.80)], MARBLE_Y=11.05, BAYS=[2.20, 3.175, 4.15, 5.125, 6.10], D=11.35,
+           CX=4.15, SY=10.70, PY=4.95, HATCH=(0.70, 0.60), BODY=(0.50, 0.40), SOFA=(1.60, 2.25, 6.70, 3.35), CHAISE=(6.70, 2.25, 7.75, 4.75),
+           RUG=(0.60, 2.15, 7.90, 7.15), TABLE=(3.85, 6.25, 0.72), SIDE=(5.35, 6.85, 0.40), CHAIRS=[(0.65, 7.05, 1.50, 7.90), (0.65, 8.45, 1.50, 9.30)])
+
+
+def _lv(x, y):
+    return (LIV_O[0] + x, LIV_O[1] + y)
+
+
+def _lr(r):
+    return (LIV_O[0] + r[0], LIV_O[1] + r[1], LIV_O[0] + r[2], LIV_O[1] + r[3])
+
+
+def living(c, fixed):
+    L = LIV
+    if fixed:
+        x0, x1, yf = L["LIB"]
+        c.rect(*_lr((x0, yf, x1, L["D"])), "FIX")
+        c.box(*_lr((x0, yf, x1, L["D"])), 0.0, 5.0, "wood", "library")
+        for x in L["BAYS"][1:-1]:
+            c.line(_lv(x, yf), _lv(x, L["D"]), "FIX")
+        for a, b in L["MARBLE"]:
+            c.rect(*_lr((a, L["MARBLE_Y"], b, L["D"])), "FIX", fill="dark")
+            c.box(*_lr((a, L["MARBLE_Y"], b, L["D"])), 0.0, 5.0, "stone", "marble wall")
+        cx, sy, py = L["CX"], L["SY"], L["PY"]
+        c.rect(*_lr((cx - 2.25, sy - 0.04, cx + 2.25, sy + 0.04)), "CEIL", dash="3 1.5", w=0.3)
+        hx, hy = L["HATCH"]
+        c.rect(*_lr((cx - hx / 2, py - hy / 2, cx + hx / 2, py + hy / 2)), "CEIL", dash="3 1.5", w=0.3)
+        c.text(_lv(cx, py - 0.55), "מקרן על ליפט בתקרה", "CEIL", h=0.13)
+        c.text(_lv(cx, sy - 0.25), "מסך נגלל בתקרה", "CEIL", h=0.13)
+        return
+    c.rect(*_lr(L["RUG"]), "RUG", dash="4 2")
+    x0, y0, x1, y1 = L["SOFA"]
+    c.rrect(*_lr(L["SOFA"]), 0.08, "FURN")
+    c.line(_lv(x0, y0 + 0.26), _lv(x1, y0 + 0.26), "FURN")
+    for i in range(1, 5):
+        c.line(_lv(x0 + i * (x1 - x0) / 5, y0 + 0.26), _lv(x0 + i * (x1 - x0) / 5, y1), "FURN")
+    c.box(*_lr(L["SOFA"]), 0.0, 0.42, "fabric", "sofa")
+    c.box(*_lr((x0, y0, x1, y0 + 0.26)), 0.42, 0.85, "fabric", "sofa back")
+    c.rrect(*_lr(L["CHAISE"]), 0.08, "FURN")
+    c.box(*_lr(L["CHAISE"]), 0.0, 0.42, "fabric", "chaise")
+    for t in (L["TABLE"], L["SIDE"]):
+        c.circle(_lv(t[0], t[1]), t[2], "FURN")
+        c.cyl(_lv(t[0], t[1]), t[2], 0.0, 0.38, "wood", tag="table")
+    for q in L["CHAIRS"]:
+        c.rrect(*_lr(q), 0.1, "FURN")
+        c.box(*_lr(q), 0.0, 0.42, "leather", "armchair")
+    place(c, S.plant(0.4), *_lv(7.6, 9.6))
+
+
+def spa(c, fixed):
+    if fixed:
+        place(c, S.sauna(2.3, 2.45), 45.8, 28.55, 0)
+        place(c, S.shower(1.0, 1.0), 50.7, 29.5, 90)
+        place(c, S.wc(), 49.6, 31.0, 180)
+        place(c, S.basin(), 48.25, 29.4, -90)
+        place(c, S.jacuzzi(2.2), 48.25, 32.4)
+        place(c, S.tank(0.4), 47.0, 21.6)
+        place(c, S.tank(0.4), 48.2, 21.6)
+        return
+    place(c, S.treadmill(), 47.0, 26.6, 180)
+    place(c, S.bike(), 48.9, 26.9, 180)
+    place(c, S.rack(1.6, 0.45), 50.7, 23.1, 90)
+    place(c, S.rug(2.0, 1.4), 47.4, 23.9)
+
+
+def terrace_furniture(c):
+    x0, y0, x1, y1 = M.PERGOLA
+    c.rect(x0, y0, x1, y1, "ROOF", dash="6 3")
+    for i in range(1, 10):
+        x = x0 + i * (x1 - x0) / 10
+        c.line((x, y0), (x, y1), "OUT", dash="2 2")
+    c.text(((x0 + x1) / 2, y1 - 0.35), "פרגולה", "TEXT-S", h=0.17)
+    place(c, S.dining(3.0, 1.0, per_side=4, ends=True), 10.0, 20.6)
+    place(c, S.sofa(2.2, 0.85, seats=3), 17.2, 13.3, 0)
+    place(c, S.round_table(0.45), 18.3, 14.8)
+    for x in (36.9, 37.9):
+        for y in (24.0, 27.5):
+            place(c, S.lounger(), x, y, 0)
+    place(c, S.parasol(1.3), 37.4, 30.9)
 
 
 def furniture_solids():

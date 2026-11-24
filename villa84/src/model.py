@@ -80,16 +80,19 @@ room("B", "B18", "מטבחון", (19.9, 29.31, 22.2, 33.7), "שירות", g_off,
 # ---- G, +-0.00: public part. Stage 2 will lay out these zones in detail.
 g_pub, g_svc, g_spa = "מגורים ואירוח", "שירות", "ביתן ספא"
 room("G", "G09", "מבואת כניסה", [(22.35, 22.35, 27.2, 27.71), (20.2, 24.5, 22.35, 27.71), (17.3, 26.41, 20.2, 27.71)], "שירות", g_pub,
-     label=(24.8, 25.6), note="דלת הכניסה מול מדרגות הכניסה מהרחבה")
+     label=(24.8, 25.4), note="דלת זכוכית כפולה מול מדרגות הכניסה. פתוחה אל הסלון, אל המדרגות ואל המעלית")
 room("G", "G10", "מדרגות", STAIR_RECT, "שירות", g_core)
 room("G", "G11", "מעלית", ELEV_RECT, "שירות", g_core)
-room("G", "G01", "מטבח ופינת אוכל", (5.8, 22.35, 17.15, 27.71), "עיקרי", g_pub, note="פונים אל מרפסת הגג")
-room("G", "G07", "מעבר שירות", (12.15, 27.86, 27.2, 29.16), "שירות", g_svc)
-room("G", "G03", "חדר משפחה וגיימינג", (5.8, 27.86, 12.0, 33.7), "עיקרי", g_pub)
-room("G", "G04", "מטבח אחורי", (12.15, 29.31, 17.15, 33.7), "שירות", g_svc)
-room("G", "G06", "מזווה גדול", TOWER, "שירות", g_svc, note="קירות מחוזקים, מעל המרחב המוגן")
-room("G", "G05", "חדר שירות וכלב", (19.9, 29.31, 23.5, 33.7), "שירות", g_svc, note="יציאה לחצר הצפונית")
-room("G", "G08", "שירותי אורחים", (23.65, 29.31, 27.2, 33.7), "שירות", g_svc)
+room("G", "G01", "פינת אוכל", (5.8, 22.35, 11.0, 29.16), "עיקרי", g_pub, label=(8.4, 28.3), note="12 סועדים, פתוחה למטבח ולמרפסת הגג")
+room("G", "G02", "מטבח", (11.15, 22.35, 17.15, 29.16), "עיקרי", g_pub, label=(14.15, 23.45), note="אי מרכזי עם כיסאות בר, פונה אל מרפסת הגג")
+room("G", "G03", "חדר משפחה וגיימינג", (5.8, 29.31, 13.6, 33.7), "עיקרי", g_pub, label=(11.1, 29.85), note="חלונות לחצר המשרד ולחצר האנגלית")
+room("G", "G04", "מטבח אחורי", (13.75, 29.31, 17.15, 33.7), "שירות", g_svc, label=(15.45, 31.6), note="צמוד למטבח ולמזווה")
+room("G", "G06", "מזווה גדול", TOWER, "שירות", g_svc, label=(18.5, 32.95), note="קירות מחוזקים, מתחת לממ״ד. קרוב למעלית מהחניון")
+room("G", "G07", "מעבר שירות", (17.3, 27.86, 25.2, 29.16), "שירות", g_svc, label=(21.6, 28.5),
+     note="מהמבואה ומהמטבח אל המזווה, חדר השירות ושירותי האורחים")
+room("G", "G05", "חדר שירות וכלב", (19.9, 29.31, 25.2, 33.7), "שירות", g_svc, label=(22.4, 31.6),
+     note="מקלחת לכלב. יציאה בגשר מעל החצר האנגלית אל השביל הצפוני והגינה")
+room("G", "G08", "שירותי אורחים", (25.35, 27.86, 27.2, 33.7), "שירות", g_svc, label=(26.3, 31.3), note="חלון לחצר האנגלית")
 room("G", "G12", "סלון", (27.35, 22.35, 35.7, 33.7), "עיקרי", g_pub, label=(31.5, 31.2), note="גובה כפול 5.00 מ׳, מקרן ומסך נסתרים")
 room("G", "P01", "חדר מכונות בריכה", (45.8, 20.8, 50.7, 22.5), "שירות", g_spa)
 room("G", "P02", "חדר כושר", (45.8, 22.65, 50.7, 28.4), "עיקרי", g_spa)
@@ -173,20 +176,27 @@ for fl in "GF":
 # ---- G (zones; stage 2)
 H("G", 22.6, 24.4, *SF, "door2", swing=1, glass=True, head=2.6)                  # front door, glazed double door 1.80
 H("G", 24.55, 26.8, *SF, "fixed", head=2.6)
-H("G", 6.1, 16.9, *SF, "slide", head=2.7)                                         # kitchen and dining to the terrace
-Vv("G", 23.6, 27.3, *WF, "win", sill=0.9, head=2.7)
-H("G", 6.3, 11.6, *NF, "win", sill=0.9, head=2.7)
-H("G", 13.0, 16.4, *NF, "win", sill=1.2, head=2.4)
-H("G", 20.4, 21.4, *NF, "door", hinge="a", swing=-1)                               # service exit
-H("G", 24.6, 25.4, *NF, "win", sill=1.6, head=2.2)
-Vv("G", 22.9, 27.5, 27.2, 27.35, "open", head=3.0)                                # hall -> living room
-H("G", 17.3, 22.35, 27.71, 27.86, "open")                                         # hall -> service passage
-H("G", 12.5, 16.8, 27.71, 27.86, "open")                                          # kitchen -> service passage
-Vv("G", 28.0, 29.0, 12.0, 12.15, "door", hinge="a", swing=1)                      # family room
-H("G", 14.0, 14.9, 29.16, 29.31, "door", hinge="a", swing=1)                      # back kitchen
-H("G", 18.0, 18.9, 29.16, 29.31, "door", hinge="a", swing=1)                      # pantry
-H("G", 21.0, 21.9, 29.16, 29.31, "door", hinge="a", swing=1)                      # service room
-H("G", 24.9, 25.8, 29.16, 29.31, "door", hinge="a", swing=1)                      # guest WC
+H("G", 6.1, 16.9, *SF, "slide", head=2.7)                                         # dining and kitchen to the terrace
+H("G", 17.55, 19.8, *SF, "fixed", sill=0.3, head=3.2)                             # stair window
+Vv("G", 23.0, 28.9, *WF, "win", sill=0.9, head=2.7)                               # dining, west
+Vv("G", 29.7, 33.3, *WF, "win", sill=0.9, head=2.7)                               # family room, west
+H("G", 6.3, 13.2, *NF, "win", sill=0.9, head=2.7)                                 # family room, north
+H("G", 14.3, 16.7, *NF, "win", sill=1.1, head=2.4)                                # back kitchen
+H("G", 18.0, 19.05, *NF, "win", sill=1.5, head=2.3)                               # pantry
+H("G", 20.4, 22.6, *NF, "win", sill=1.2, head=2.4)                                # service room
+H("G", 23.6, 24.6, *NF, "door", hinge="b", swing=-1)                              # service exit to the bridge
+H("G", 25.85, 26.75, *NF, "win", sill=1.6, head=2.3)                              # guest WC
+Vv("G", 22.9, 27.71, 27.2, 27.35, "open", head=3.0)                               # hall -> living room
+Vv("G", 22.9, 28.6, 11.0, 11.15, "open")                                          # dining <-> kitchen
+Vv("G", 26.41, 27.71, 17.15, 17.3, "open")                                        # kitchen <-> stair landing
+Vv("G", 27.86, 29.16, 17.15, 17.3, "open")                                        # kitchen <-> service passage
+H("G", 23.0, 24.4, 27.71, 27.86, "open")                                          # hall <-> service passage
+H("G", 7.3, 9.1, 29.16, 29.31, "door2", swing=1, glass=True)                      # dining -> family room
+H("G", 14.6, 15.5, 29.16, 29.31, "door", hinge="a", swing=1)                      # kitchen -> back kitchen
+Vv("G", 31.2, 32.1, 17.15, 17.3, "door", hinge="a", swing=1)                      # back kitchen -> pantry
+H("G", 18.1, 19.0, 29.16, 29.31, "door", hinge="a", swing=1)                      # passage -> pantry
+H("G", 21.0, 21.9, 29.16, 29.31, "door", hinge="a", swing=1)                      # passage -> service room
+Vv("G", 28.0, 28.9, 25.2, 25.35, "door", hinge="a", swing=1)                      # passage -> guest WC
 # living room and pavilion (unchanged)
 H("G", 27.9, 35.1, *SF, "slide", head=4.6)
 Vv("G", 22.9, 33.1, 35.7, 36.0, "slide", head=4.6)
@@ -232,6 +242,8 @@ SKYLIGHTS = [(6.0, 17.75, 16.8, 19.15)]                # walkable glass strip in
 OFFICE_RAMP = dict(runs=[(0.95, 23.4, 2.25, 26.8, -1), (2.4, 23.4, 3.7, 26.8, 1)],
                    landings=[(0.95, 26.8, 2.25, 28.6), (0.95, 22.0, 3.7, 23.4)], z0=86.94, z1=87.50)
 NORTH_PATH = (27.5, 34.0, 45.5, 35.0)
+BRIDGE = (23.3, 34.0, 27.5, 35.0)                       # from the service exit over the English court to the north path
+PERGOLA = (6.2, 16.4, 16.4, 21.8)                       # shade over the outdoor dining on the terrace
 OFFICE_COURT = [(0.9, 19.0), (5.5, 19.0), (5.5, 34.0), (0.75, 34.0)]
 
 
