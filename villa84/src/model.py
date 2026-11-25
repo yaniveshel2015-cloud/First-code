@@ -284,8 +284,8 @@ def south_boundary_y(x):
 DRIVEWAY = [(0.95, 2.1), (0.72, 8.3), (6.6, 9.4), (6.6, 12.2), (16.7, 12.2), (16.7, 10.5), (20.5, 10.5),
             (20.5, south_boundary_y(20.5) + 1.0), (12.0, south_boundary_y(12.0) + 1.0), (5.0, south_boundary_y(5.0) + 1.0)]
 GATES = {"vehicle": ((0.93, 2.6), (0.74, 7.4)), "pedestrian": ((0.52, 26.9), (0.5, 28.6))}
-TREES = [(30.0, 16.2, 1.6), (34.5, 17.4, 1.5), (3.2, 14.0, 1.4), (3.0, 16.9, 1.1), (47.5, 16.9, 1.3), (53.0, 23.5, 1.2),
-         (38.0, 18.2, 1.3)]
+TREES = [("olive", x, y, r) for x, y, r in ((30.0, 16.2, 1.6), (34.5, 17.4, 1.5), (3.2, 14.0, 1.4), (3.0, 16.9, 1.1), (47.5, 16.9, 1.3),
+                                             (53.0, 23.5, 1.2), (38.0, 18.2, 1.3))]
 CYPRESS = [(20.5 + 2.5 * i, 35.6) for i in range(int((53.0 - 20.5) / 2.5) + 1)] + [(54.6, y) for y in (25.0, 27.5, 30.0, 32.5)]
 
 
@@ -346,9 +346,12 @@ def gross_area(fl):
 
 
 def polys(g):
+    """The polygons in a geometry (collections are flattened; lines and points are dropped)."""
     if g.is_empty:
         return []
-    return list(g.geoms) if hasattr(g, "geoms") else [g]
+    if hasattr(g, "geoms"):
+        return [p for part in g.geoms for p in polys(part)]
+    return [g] if g.geom_type == "Polygon" else []
 
 
 def wall_solid(fl):

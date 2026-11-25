@@ -152,9 +152,13 @@ for rects, top, t, void in SEC.SLABS:
     g = unary_union([sbox(*r) for r in rects])
     if void:
         g = g.difference(SEC.VOID)
+    if abs(top) < 1e-9:
+        g = g.difference(SEC.OPEN_G)
     prism_geom(g, top - t, top, "concrete", "slab", FLOOR_OF_TOP[top])
+for q in M.SKYLIGHTS:
+    box(q[0], q[1], q[2], q[3], -0.06, 0.0, "glass", "glass", "G", "terrace glass strip")
 
-FLOOR_MAT = {"חניון": "floor_epoxy", "חדר קולנוע": "floor_carpet", "מחסן": "floor_epoxy", "חדר מערכות": "floor_epoxy",
+FLOOR_MAT = {"מקלט משותף": "floor_concrete", "פטיו": "garden", "חניון": "floor_epoxy", "חדר קולנוע": "floor_carpet", "מחסן": "floor_epoxy", "חדר מערכות": "floor_epoxy",
              "חדר מכונות בריכה": "floor_epoxy", "מרחב מוגן": "floor_stone", "ממ״ד": "floor_wood", "חדר כושר": "floor_rubber", "סאונה": "floor_wood_light",
              "פיר מעלית": "floor_stone"}
 
@@ -163,7 +167,7 @@ def floor_mat(r):
     n = r["name"]
     if n in FLOOR_MAT:
         return FLOOR_MAT[n]
-    if any(w in n for w in ("מקלחת", "שירותי", "ג׳קוזי", "כביסה", "שירות")):
+    if any(w in n for w in ("מקלחת", "שירותי", "ג׳קוזי", "כביסה", "שירות", "רחצה", "מטבח")):
         return "floor_tile"
     if r["floor"] == "F" or n in ("סלון", "חדר משפחה וגיימינג"):
         return "floor_wood"
@@ -194,17 +198,21 @@ for (rect, top, h, mat) in (((5.5, 22.05, 27.5, 34.0), 6.80, 0.5, "roof_gravel")
 
 # ============================================================================ stairs
 s = M.STAIR
-xe0, xe1, xw0, xw1 = s["x1"] - s["width"], s["x1"], s["x0"], s["x0"] + s["width"]
+w = s["width"]
+xw0, xw1, xe0, xe1 = s["x0"], s["x0"] + w, s["x1"] - w, s["x1"]
+ys, n_, tr, rs = s["y0"], s["n"], s["tread"], s["rise"]
+ylan, ly0 = ys - n_ * tr, s["landing"][1]
 for z0, fl in ((-3.5, "B"), (0.0, "G")):
-    yl, zl = s["y0"] + s["n"] * s["tread"], z0 + (s["n"] + 1) * s["rise"]
-    for i in range(s["n"]):
-        zt = z0 + (i + 1) * s["rise"]
-        box(xe0, s["y0"] + i * s["tread"], xe1, s["y0"] + (i + 1) * s["tread"] + 0.02, max(z0, zt - 0.36), zt, "stair", "stair", fl)
-        zt2 = zl + (i + 1) * s["rise"]
-        box(xw0, yl - (i + 1) * s["tread"] - 0.02, xw1, yl - i * s["tread"], zt2 - 0.36, zt2, "stair", "stair", fl)
-    box(s["x0"], yl, s["x1"], M.STAIR_RECT[3], zl - 0.2, zl, "stair", "stair", fl)
-    box(xw1 + 0.05, s["y0"], xe0 - 0.05, yl, z0, z0 + 3.5 + 1.0, "glass", "glass", fl, "stair balustrade")
-box(xw1 + 0.05, s["y0"] - 0.02, xe1, s["y0"] + 0.02, 3.5, 4.55, "glass", "glass", "F", "stairwell guard")
+    zl = z0 + (n_ + 1) * rs
+    for i in range(n_):                         # west flight: from the floor landing (north) down to the half landing
+        zt = z0 + (i + 1) * rs
+        box(xw0, ys - (i + 1) * tr - 0.02, xw1, ys - i * tr, max(z0, zt - 0.36), zt, "stair", "stair", fl)
+    box(s["x0"], ly0, s["x1"], ylan, zl - 0.2, zl, "stair", "stair", fl)
+    for i in range(n_):                         # east flight: back north to the next floor
+        zt2 = zl + (i + 1) * rs
+        box(xe0, ylan + i * tr, xe1, ylan + (i + 1) * tr + 0.02, zt2 - 0.36, zt2, "stair", "stair", fl)
+    box(xw1 + 0.05, ylan, xe0 - 0.05, ys, z0, z0 + 3.5 + 1.0, "glass", "glass", fl, "stair balustrade")
+box(xw0, ys - 0.02, xw1 + 0.05, ys + 0.02, 3.5, 4.55, "glass", "glass", "F", "stairwell guard")
 
 e = M.EXT_STAIR
 rise = (e["z1"] - e["z0"]) / e["risers"]
@@ -219,7 +227,10 @@ box(lx1, ly0, lx1 + 0.03, ly1, -0.2, 1.05, "glass", "glass", "S", "entrance stai
 tx0, ty0, tx1, ty1 = M.TERRACE
 g0, g1 = M.TERRACE_GATE
 planters = [sbox(tx0, ty0, g0 - 0.15, ty0 + 0.8), sbox(g1 + 0.15, ty0, tx1, ty0 + 0.8), sbox(tx0, ty0 + 0.8, tx0 + 0.8, ty1)]
-terr = sbox(tx0, ty0, tx1, ty1).difference(unary_union(planters))
+pq = M.PATIO
+patio_ring = sbox(pq[0] - 0.3, pq[1] - 0.3, pq[2], pq[3] + 0.3).difference(sbox(*pq))
+planters.append(patio_ring)
+terr = sbox(tx0, ty0, tx1, ty1).difference(unary_union(planters)).difference(SEC.OPEN_G)
 prism_geom(terr, 0.0, 0.03, "deck_stone", "finish", "G", "roof terrace")
 for p in planters:
     prism_geom(p.difference(p.buffer(-0.08, join_style=2)), 0.0, 0.5, "planter", "site", "G")
@@ -228,14 +239,38 @@ for p in planters:
 box(tx0, ty0 - 0.02, g0 - 0.15, ty0 + 0.01, 0.0, 1.1, "glass", "glass", "G", "terrace guard")
 box(g1 + 0.15, ty0 - 0.02, tx1, ty0 + 0.01, 0.0, 1.1, "glass", "glass", "G", "terrace guard")
 box(tx0 - 0.02, ty0, tx0 + 0.01, ty1, 0.0, 1.1, "glass", "glass", "G", "terrace guard")
-# pergola
-for px in (8.0, 14.5):
-    for py in (13.6, 18.6):
+for a0, b0, a1, b1 in ((pq[0] - 0.32, pq[1] - 0.32, pq[2], pq[1] - 0.29), (pq[0] - 0.32, pq[3] + 0.29, pq[2], pq[3] + 0.32),
+                       (pq[0] - 0.32, pq[1] - 0.32, pq[0] - 0.29, pq[3] + 0.32)):
+    box(a0, b0, a1, b1, 0.0, 1.1, "glass", "glass", "G", "patio guard")
+prism_geom(sbox(*pq), -3.5, -3.42, "garden", "site", "B", "patio garden")
+markers.append(dict(kind="olive", p=[(pq[0] + pq[2]) / 2 + 0.6, (pq[1] + pq[3]) / 2], r=1.0, z=-3.45, floor="B"))
+# pergola over the outdoor dining
+pg = M.PERGOLA
+for px in (pg[0] + 0.1, pg[2] - 0.1):
+    for py in (pg[1] + 0.1, pg[3] - 0.1):
         box(px - 0.07, py - 0.07, px + 0.07, py + 0.07, 0.03, 2.65, "steel_dark", "site", "G", "pergola")
-for py in (13.6, 18.6):
-    box(7.9, py - 0.07, 14.6, py + 0.07, 2.65, 2.83, "steel_dark", "site", "G", "pergola")
-for kx in range(14):
-    box(8.0 + kx * 0.5 - 0.03, 13.5, 8.0 + kx * 0.5 + 0.03, 18.7, 2.83, 2.97, "wood_dark", "site", "G", "pergola")
+for py in (pg[1] + 0.1, pg[3] - 0.1):
+    box(pg[0], py - 0.07, pg[2], py + 0.07, 2.65, 2.83, "steel_dark", "site", "G", "pergola")
+nb = int((pg[2] - pg[0]) / 0.5)
+for kx in range(nb + 1):
+    xx = pg[0] + kx * (pg[2] - pg[0]) / nb
+    box(xx - 0.03, pg[1], xx + 0.03, pg[3], 2.83, 2.97, "wood_dark", "site", "G", "pergola")
+# bridge from the service room over the English court to the north path
+bq = M.BRIDGE
+box(bq[0], bq[1], bq[2], bq[3], -0.18, 0.0, "deck_stone", "site", "S", "bridge")
+box(bq[0], bq[3] - 0.03, bq[2], bq[3], 0.0, 1.05, "glass", "glass", "S", "bridge guard")
+# accessible ramp in the office court: runs as stepped slabs between the street gate and the court
+rp = M.OFFICE_RAMP
+zg, zc = rp["z0"] - M.ABS0, rp["z1"] - M.ABS0
+box(*rp["landings"][0], zg - 0.3, zg, "paving", "site", "S", "ramp landing")
+zm = (zg + zc) / 2
+box(*rp["landings"][1], zm - 0.3, zm, "paving", "site", "S", "ramp landing")
+for (x0, y0, x1, y1, d), (za, zb) in zip(rp["runs"], ((zg, zm), (zm, zc))):
+    k = 8
+    for i in range(k):
+        ya, yb = (y1 - (i + 1) * (y1 - y0) / k, y1 - i * (y1 - y0) / k) if d < 0 else (y0 + i * (y1 - y0) / k, y0 + (i + 1) * (y1 - y0) / k)
+        zt = za + (zb - za) * (i + 0.5) / k
+        box(x0, ya, x1, yb, zt - 0.3, zt, "paving", "site", "S", "ramp")
 for b in M.BALCONIES:
     box(b[0], b[1], b[2], b[3], 3.5, 3.53, "deck_stone", "finish", "F", "balcony")
     box(b[0], b[1] - 0.01, b[2], b[1] + 0.02, 3.5, 4.6, "glass", "glass", "F", "balcony guard")

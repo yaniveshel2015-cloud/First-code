@@ -5,7 +5,7 @@ Everything is read from model.py.
 """
 import math
 
-from shapely.geometry import LineString, Polygon, box as sbox
+from shapely.geometry import LineString, Point, Polygon, box as sbox
 from shapely.ops import unary_union
 
 import model as M
@@ -755,12 +755,22 @@ def terrace_furniture(c):
 
 
 def furniture_solids():
+    """3D furniture and fixtures per floor, raised to the floor level."""
     out = {}
     for fl in "BGF":
         c = Canvas()
         fixtures(c, fl)
         furniture(c, fl)
-        out[fl] = c.solids
+        dz = M.LEVELS[fl]["z"]
+        sol = []
+        for so in c.solids:
+            so = dict(so)
+            if "marker" in so:
+                so["z"] = so.get("z", 0.0) + dz
+            else:
+                so["z0"], so["z1"] = so["z0"] + dz, so["z1"] + dz
+            sol.append(so)
+        out[fl] = sol
     return out
 
 
@@ -811,8 +821,85 @@ def floor_canvas(fl, mode="arch"):
 
 
 def site_canvas():
-    """Site plan: written in stage 4."""
+    """Site plan at 1:200: the survey underlay, contours, the house roofs, terraces, courts, pool, trees, plot and building lines."""
     c = Canvas()
-    _plot_and_lines(c)
+    S_ = M.SITE
+    win = sbox(-14.0, -10.0, 68.0, 48.0)
+    for u in S_["underlay"]:
+        line = LineString(u["pts"]).intersection(win) if len(u["pts"]) > 1 else None
+        if line is None or line.is_empty:
+            continue
+        for part in ([line] if line.geom_type == "LineString" else [g for g in getattr(line, "geoms", []) if g.geom_type == "LineString"]):
+            c.poly(list(part.coords), "SURV-LOT" if u["color"] in (1, 3) else "SURVEY", closed=False)
+    for t in S_["contours"]:
+        z = t["z"]
+        major = abs(z - round(z)) < 1e-6
+        c.poly(t["pts"], "TOPO-M" if major else "TOPO", closed=False)
+        if major and len(t["pts"]) > 6:
+            k = len(t["pts"]) // 3
+            x, y = t["pts"][k]
+            if win.contains(Point(x, y)) and not sbox(5.0, 11.7, 51.5, 37.0).contains(Point(x, y)):
+                c.text((x, y), f"{z:.0f}", "TOPO-T", h=0.55)
+    # ground surfaces
+    c.poly(M.DRIVEWAY, "PAVE", fill="pave")
+    c.poly(M.OFFICE_COURT, "PAVE", fill="pave")
+    c.rect(*M.ENGLISH_COURT, "PAVE", fill="pave")
+    c.rect(*M.NORTH_PATH, "PAVE", fill="pave")
+    c.rect(*M.BRIDGE, "PAVE", fill="deck")
+    c.rect(*M.POOL_DECK, "PAVE", fill="deck")
+    c.rect(*M.POOL, "WATER", fill="water")
+    _terrace(c)
+    _ext_stair(c)
+    x0, y0, x1, y1 = M.PERGOLA
+    c.rect(x0, y0, x1, y1, "ROOF", dash="6 3")
+    # roofs
+    c.rect(5.5, 22.05, 27.5, 34.0, "ROOF", fill="roof2")
+    c.rect(27.5, 22.05, 36.0, 34.0, "ROOF", fill="roof")
+    c.rect(45.5, 20.5, 51.0, 34.0, "ROOF", fill="roof")
+    for b in M.BALCONIES:
+        c.rect(*b, "ROOF", fill="deck")
+    c.text((16.5, 29.2), "וילה · גג קומה א׳", "TEXT", h=0.6, bold=True)
+    c.text((16.5, 28.2), f"{lvl(6.80)} (+{M.ABS0 + 6.80:.2f})", "TEXT-S", h=0.45)
+    c.text((31.75, 29.2), "סלון · גג ירוק", "TEXT", h=0.5, bold=True)
+    c.text((31.75, 28.3), f"{lvl(M.LIVING_TOP)}", "TEXT-S", h=0.42)
+    c.text((48.25, 28.0), "ספא", "TEXT", h=0.5, bold=True, rot=90)
+    c.text((41.5, 27.5), "בריכה", "TEXT", h=0.5, bold=True, rot=90)
+    c.text((11.0, 9.6), "רחבת כניסה · חניון במרתף", "TEXT-S", h=0.45)
+    c.text((3.0, 30.0), "חצר המשרד", "TEXT-S", h=0.42, rot=90)
+    c.text((16.0, 35.4), "חצר אנגלית", "TEXT-S", h=0.4)
+    c.text((-4.5, 18.0), "רחוב", "TEXT", h=0.7, bold=True, rot=90)
+    for kind, x, y, r in M.TREES:
+        c.circle((x, y), r, "TREE", fill="tree")
+    for x, y in M.CYPRESS:
+        c.circle((x, y), 0.55, "TREE", fill="tree2")
     pillars(c, site=True)
+    _plot_and_lines(c)
+    # plot edges: lengths, and the distance from the house to each edge
+    pts = S_["plot"]
+    for k, e in enumerate(S_["edges"]):
+        (ax, ay), (bx, by) = pts[k], pts[(k + 1) % len(pts)]
+        mx, my = (ax + bx) / 2, (ay + by) / 2
+        L = math.hypot(bx - ax, by - ay)
+        nx, ny = (by - ay) / L, -(bx - ax) / L               # outward for a counter-clockwise plot ring
+        if Polygon(pts).contains(Point(mx + nx * 0.5, my + ny * 0.5)):
+            nx, ny = -nx, -ny
+        ang = math.degrees(math.atan2(by - ay, bx - ax))
+        if ang > 90 or ang <= -90:
+            ang += 180
+        c.text((mx + nx * 1.0, my + ny * 1.0), f"{e['len']:.2f}", "PLOT", h=0.5, rot=ang, bold=True)
+    for a, b in (((5.5, 28.0), (M.front_x(28.0), 28.0)), ((16.0, 34.0), (16.0, 37.0)), ((51.0, 27.0), (56.0 + (58.673 - 56.0) * (27.0 - 37.0) / (18.573 - 37.0), 27.0)),
+                 ((27.5, 22.05), (27.5, M.south_boundary_y(27.5)))):
+        c.adim(a, b, "SETBACK", off=0.0, h=0.42, unit="m")
+    for x, y, z in S_["spots"]:
+        if win.contains(Point(x, y)) and not sbox(5.3, 12.0, 51.2, 34.2).contains(Point(x, y)):
+            c.circle((x, y), 0.08, "SPOT", fill="dark")
+            c.text((x + 0.25, y + 0.25), f"{z:.2f}", "SPOT", h=0.32, anchor="r")
+    for name, x, y in S_["lots"]:
+        if win.contains(Point(x, y)):
+            c.text((x, y), f"מגרש {name}", "SURV-LOT", h=1.0 if name == "84" else 0.7, bold=name == "84")
+    for name, (axis, at, lo, hi) in (("A", CUTS_PLAN["A"]),):
+        c.line((lo, at), (hi, at), "CUT", dash="12 3 2 3", w=0.2)
+        for p in ((lo, at), (hi, at)):
+            c.circle((p[0], p[1] + 1.2), 0.6, "CUT", fill="white")
+            c.text((p[0], p[1] + 1.2), "א", "TEXT", h=0.6, bold=True)
     return c

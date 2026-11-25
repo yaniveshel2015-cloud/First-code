@@ -8,9 +8,10 @@ from symbols import Canvas
 CUTS = {
     "A": dict(axis="y", at=24.0, lo=-1.5, hi=61.0),      # along the plot, street to garden
     "B": dict(axis="x", at=14.0, lo=-2.0, hi=43.0),      # across the plot, through garage and office
-    "C": dict(axis="x", at=26.55, lo=-2.0, hi=43.0),     # across the plot, through the east stair flight
+    "C": dict(axis="x", at=19.4, lo=-2.0, hi=43.0),      # across the plot, through the stair (east flight)
 }
 VOID = unary_union([sbox(*M.STAIR_RECT), sbox(*M.ELEV_RECT)])          # stairwell and shaft: no floor slab
+OPEN_G = unary_union([sbox(*M.PATIO)] + [sbox(*q) for q in M.SKYLIGHTS])   # patio opening and glass strip in the terrace slab
 SLABS = [  # (rects, top level, thickness, has stairwell void)
     (M.OUTLINES["B"], -3.50, 0.35, False),
     ([(5.5, 12.2, 27.5, 34.0), (27.5, 22.05, 36.0, 34.0)], 0.00, 0.30, True),
@@ -77,12 +78,12 @@ def earth_profile(cut):
         tail = 52.5
     elif cut == "B":
         xw, xe = M.south_boundary_y(c["at"]), 37.0
-        segs = [(xw, 12.2, -3.55), (12.2, 34.0, -3.85), (34.0, 36.2, -3.55)]
-        tail = 36.2
+        segs = [(xw, 12.2, -3.55), (12.2, 34.0, -3.85), (34.0, 36.6, -3.55)]
+        tail = 36.6
     else:
         xw, xe = M.south_boundary_y(c["at"]), 37.0
-        segs = [(12.2, 34.0, -3.85)]
-        tail = 34.0
+        segs = [(12.2, 34.0, -3.85), (34.0, 36.6, -3.55)]
+        tail = 36.6
     pts = []
     s = c["lo"]
     first = segs[0][0]
@@ -102,30 +103,35 @@ def earth_profile(cut):
 
 
 def stair_flights(c, z0):
-    """Cut flight (east) in solid, the return flight beyond it in outline. Used by section C."""
+    """Section C (along Y) through the east flight: the cut flight in solid, the west flight beyond it in outline.
+    Each storey: the west flight rises southward from the floor landing (north end) to the half landing (south end),
+    the east flight rises northward back to the next floor."""
     s = M.STAIR
-    y0, tr, rs, n = s["y0"], s["tread"], s["rise"], s["n"]
-    yl, zl, yn = y0 + n * tr, z0 + (n + 1) * rs, M.STAIR_RECT[3]
-    top = [(y0, z0)]
-    for i in range(n + 1):
-        y = y0 + i * tr
-        top.append((y, z0 + (i + 1) * rs))
-        if i < n:
-            top.append((y + tr, z0 + (i + 1) * rs))
-    top.append((yn, zl))
-    under = [(yn, zl - 0.18), (yl + 0.12, zl - 0.18), (y0, z0 - 0.22)]
+    ys, tr, rs, n = s["y0"], s["tread"], s["rise"], s["n"]
+    ylan = ys - n * tr                      # start of the half landing
+    ly0 = s["landing"][1]                   # south end of the half landing
+    zl = z0 + (n + 1) * rs                  # half landing level
+    # east flight (cut): rises from (ylan, zl) to (ys, z0 + 3.5)
+    top = [(ly0, zl)]
+    top.append((ylan, zl))
+    for i in range(n):
+        y = ylan + i * tr
+        top.append((y, zl + (i + 1) * rs))
+        top.append((y + tr, zl + (i + 1) * rs))
+    top.append((ys, z0 + 3.5))
+    under = [(ys, z0 + 3.5 - 0.22), (ylan + 0.12, zl - 0.18), (ly0, zl - 0.18)]
     c.poly(top + under, "SEC-CUT", fill="slab")
-    c.line((y0 + 0.1, z0 + rs + 0.9), (yl, zl + 0.9), "SEC-VIEW", w=0.25)        # handrail
-    c.line((yl, zl + 0.9), (yn - 0.05, zl + 0.9), "SEC-VIEW", w=0.25)
-    prof = [(yl, zl)]
-    for i in range(n + 1):
-        y = yl - i * tr
-        prof.append((y, zl + (i + 1) * rs))
-        if i < n:
-            prof.append((y - tr, zl + (i + 1) * rs))
+    c.line((ylan, zl + 0.9), (ys - 0.1, z0 + 3.5 + 0.9), "SEC-VIEW", w=0.25)          # handrail
+    # west flight (beyond): rises from (ys, z0) southward to (ylan, zl)
+    prof = [(ys, z0)]
+    for i in range(n):
+        y = ys - i * tr
+        prof.append((y, z0 + (i + 1) * rs))
+        prof.append((y - tr, z0 + (i + 1) * rs))
+    prof.append((ylan, zl))
     c.poly(prof, "SEC-VIEW", closed=False)
-    c.line((yl + 0.12, zl - 0.18), (y0 + tr, z0 + 3.5 - 0.42), "SEC-VIEW")
-    c.line((yl - 0.1, zl + rs + 0.9), (y0, z0 + 3.5 + 0.9), "SEC-VIEW", dash="3 2")
+    c.line((ys, z0 - 0.2), (ylan + 0.12, zl - 0.2), "SEC-VIEW")
+    c.line((ys - 0.1, z0 + 0.9), (ylan, zl + 0.9), "SEC-VIEW", dash="3 2")
 
 
 def section(cut, site=False):
@@ -174,6 +180,8 @@ def section(cut, site=False):
         g = unary_union([sbox(*r) for r in rects])
         if void:
             g = g.difference(VOID)
+        if abs(top) < 1e-9:
+            g = g.difference(OPEN_G)
         for a, b in spans(g, cut):
             c.rect(a, top - t, b, top, "SEC-CUT", fill="slab")
             if top in PARAPET:
@@ -183,9 +191,12 @@ def section(cut, site=False):
     if cut in ("B", "C"):       # terrace over the garage: glass railing and planter; balcony railing
         c.line((12.25, 0.0), (12.25, 1.05), "GLASS", w=0.3)
         c.rect(12.4, 0.0, 13.0, 0.45, "SEC-VIEW", fill="green")
-        c.line((20.29, 3.5), (20.29, 4.55), "GLASS", w=0.3)
     if cut == "B":
-        c.line((36.2, -3.5), (36.2, natural(cut, 36.6)), "SEC-CUT", w=0.5)
+        c.line((20.29, 3.5), (20.29, 4.55), "GLASS", w=0.3)
+        for q in M.SKYLIGHTS:              # walkable glass strip in the terrace, over the parking walkway
+            c.rect(q[1], -0.08, q[3], 0.0, "GLASS", fill="glass")
+    if cut in ("B", "C"):             # retaining wall of the English court
+        c.line((36.6, -3.5), (36.6, natural(cut, 36.9)), "SEC-CUT", w=0.5)
     # room names
     if not site:
         for fl in "BGF":
@@ -237,14 +248,14 @@ def section(cut, site=False):
         c.text((xw - 1.6, natural(cut, xw - 1.6) + 0.45), "מגרש 85", "TEXT-S", h=0.2)
         c.text((38.4, natural(cut, 38.4) + 0.45), "מגרש 83", "TEXT-S", h=0.2)
         c.text((17.1, 0.75) if cut == "B" else (16.2, 0.75), "מרפסת גג", "TEXT-S", h=0.2)
+        c.text((35.3, -3.2), "חצר אנגלית", "TEXT-S", h=0.14)
         if cut == "B":
             c.text((8.3, -3.2), "רחבת כניסה לחניון", "TEXT-S", h=0.17)
-            c.text((35.1, -4.15), "חצר אנגלית", "TEXT-S", h=0.14)
+            c.text((18.45, 0.25), "פס זכוכית", "TEXT-S", h=0.13)
         else:
-            c.text((31.3, -2.9), "מדרגות", "TEXT-S", h=0.17)
-            c.text((31.3, 0.6), "מדרגות", "TEXT-S", h=0.17)
-            c.text((23.6, 4.0), "מרפסת", "TEXT-S", h=0.15)
-            c.text((9.8, natural(cut, 9.8) + 0.45), "גינה", "TEXT-S", h=0.2)
+            c.text((24.3, -1.2), "מדרגות", "TEXT-S", h=0.17)
+            c.text((24.3, 2.3), "מדרגות", "TEXT-S", h=0.17)
+            c.text((9.8, -3.2), "רחבת כניסה", "TEXT-S", h=0.17)
     if not site:
         # heights: floor to floor on one side of the building, clear heights inside, lengths under the building (all in cm)
         ref, hx, sg = (5.5, 4.5, -1) if cut == "A" else (34.0, 34.9, 1)
@@ -254,7 +265,7 @@ def section(cut, site=False):
         c.dim((ref, lv[0]), (ref, lv[-1]), "V", hx + sg * 0.8, h=0.17)
         clear = {"A": [(10.25, -3.5, -0.3), (10.25, 0.0, 3.2), (10.25, 3.5, 6.5), (35.2, 0.0, M.LIVING_TOP - 0.3), (50.4, 0.0, M.PAV_TOP - 0.25)],
                  "B": [(13.2, -3.5, -0.3), (22.9, -3.5, -0.3), (22.9, 0.0, 3.2), (22.9, 3.5, 6.5)],
-                 "C": [(16.0, -3.5, -0.3), (22.9, -3.5, -0.3), (22.9, 0.0, 3.2), (22.9, 3.5, 6.5)]}[cut]
+                 "C": [(16.0, -3.5, -0.3), (28.5, -3.5, -0.3), (28.5, 0.0, 3.2), (28.5, 3.5, 6.5)]}[cut]
         for s_, z0, z1 in clear:
             c.dim((s_, z0), (s_, z1), "V", s_, h=0.15)
         sp = {"A": [5.5, 27.5, 36.0, 45.5, 51.0], "B": [12.2, 22.05, 34.0], "C": [12.2, 22.05, 34.0]}[cut]

@@ -339,7 +339,7 @@ vc = View(-2.0, -5.4, 43.0, 9.2, 100, 8 + (PLAN_W - 45 * 10) / 2, 30 + 2 * (146 
 svg = (render(SEC.section("A"), va, text_k=1.25, clip_id="sa") + render(SEC.section("B"), vb, text_k=1.25, clip_id="sb")
        + render(SEC.section("C"), vc, text_k=1.25, clip_id="sc"))
 for vv, ttl in ((va, "חתך א–א · לאורך המגרש, מהרחוב אל הגינה"), (vb, "חתך ב–ב · לרוחב המגרש, דרך החניון והמשרד"),
-                (vc, "חתך ג–ג · לרוחב המגרש, דרך המדרגות וחדר הקולנוע")):
+                (vc, "חתך ג–ג · לרוחב המגרש, דרך המדרגות, הלובי המשפחתי ושירותי המשרד")):
     svg += f'<text class="t" x="{W_MM - 16 - PANEL:.1f}" y="{vv.top - 6:.1f}" font-size="6" font-weight="700" text-anchor="start">{ttl}</text>'
 svg += scale_bar(60, 566, 100)
 body = ('<h2>מה רואים בחתכים</h2><ul>'
