@@ -189,7 +189,8 @@ def labels(c, fl, compact=False):
         small = a < 6.0
         h = (0.2 if small else TXT_NAME) * (0.9 if compact else 1.0)
         q = min(r["rects"], key=lambda q: (abs((q[0] + q[2]) / 2 - x) + abs((q[1] + q[3]) / 2 - y)))
-        narrow = (q[2] - q[0]) < 2.1 and (q[3] - q[1]) > (q[2] - q[0])
+        w_txt = len(r["name"]) * h * 0.68                    # rough width of the name as rendered
+        narrow = (q[3] - q[1]) > (q[2] - q[0]) and ((q[2] - q[0]) < 2.1 or w_txt > (q[2] - q[0]) - 0.25)
         if small:
             c.text((x, y + 0.12), r["name"], "TEXT", h=h, bold=True)
             c.text((x, y - 0.18), f"{a:.1f}", "TEXT-S", h=0.15)
@@ -326,7 +327,8 @@ CHAINS = {
           ("V", 6.55, 12.0, 34.2), ("V", 16.35, 12.0, 34.2), ("V", 22.95, 12.0, 34.2), ("V", 26.25, 12.0, 34.2)],
     "G": [("H", 22.95, 5.0, 36.3), ("H", 28.5, 5.0, 36.3), ("H", 33.05, 5.0, 36.3),
           ("V", 6.55, 21.8, 34.2), ("V", 16.4, 21.8, 34.2), ("V", 21.5, 21.8, 34.2), ("V", 26.6, 21.8, 34.2), ("V", 34.9, 21.8, 34.2)],
-    "F": [("H", 24.4, 5.0, 28.0), ("H", 31.0, 5.0, 28.0), ("V", 9.0, 21.8, 34.2), ("V", 15.0, 21.8, 34.2), ("V", 25.8, 21.8, 34.2)],
+    "F": [("H", 22.95, 5.0, 28.0), ("H", 28.5, 5.0, 28.0), ("H", 33.05, 5.0, 28.0),
+          ("V", 6.55, 21.8, 34.2), ("V", 12.0, 21.8, 34.2), ("V", 21.2, 21.8, 34.2), ("V", 26.0, 21.8, 34.2)],
 }
 
 
@@ -446,9 +448,13 @@ def outdoor(c, fl):
         _terrace(c, below=True)
         for x0, y0, x1, y1 in M.BALCONIES:
             c.rect(x0, y0, x1, y1, "PAVE", fill="deck")
+        c.line((11.47, 20.25), (11.47, 22.05), "FIX", w=0.4)
+        c.text((8.6, 21.15), "מרפסת הורים", "TEXT-S", h=0.17)
+        c.text((14.35, 21.15), "מרפסת הילד", "TEXT-S", h=0.17)
+        c.text((24.8, 21.15), "מרפסת נוער 1", "TEXT-S", h=0.17)
         c.rect(27.5, 22.05, 36.0, 34.0, "ROOF", fill="roof")
-        c.text((31.75, 28.0), "גג ירוק מעל הסלון", "TEXT", h=0.28, bold=True)
-        c.text((31.75, 27.4), f"{lvl(M.LIVING_TOP)}", "TEXT-S", h=0.2)
+        c.text((30.4, 28.0), "גג ירוק מעל הסלון", "TEXT", h=0.28, bold=True)
+        c.text((30.4, 27.4), f"{lvl(M.LIVING_TOP)}", "TEXT-S", h=0.2)
         c.rect(45.5, 20.5, 51.0, 34.0, "ROOF", fill="roof")
         c.rect(*M.POOL, "BELOW", dash="4 2")
 
@@ -543,7 +549,33 @@ def fixtures(c, fl):
         living(c, fixed=True)
         spa(c, fixed=True)
     else:
-        pass
+        # parents' bath (8.75-11.4 x 29.31-33.7): tub under the window, shower, double basin, WC
+        place(c, S.bathtub(1.75, 0.8), 11.2, 33.7, 180)
+        place(c, S.shower(1.0, 1.1), 11.4, 31.9, 90)
+        place(c, S.vanity(1.4, 0.55, n=2), 11.4, 29.5, 90)
+        place(c, S.wc(), 8.75, 32.45, -90)
+        # parents' closet: wardrobes on the west and north walls, dresser island
+        place(c, S.wardrobe(3.7, 0.6), 5.8, 33.0, -90)
+        place(c, S.wardrobe(2.0, 0.6), 8.55, 33.7, 180)
+        place(c, S.table(1.2, 0.6, h=0.9), 7.6, 31.0)
+        # child's bath (14.75-17.15 x 29.31-33.7)
+        place(c, S.bathtub(1.7, 0.75), 16.95, 33.7, 180)
+        place(c, S.wc(), 17.15, 31.7, 90)
+        place(c, S.basin(), 14.75, 31.2, -90)
+        # teen shower room (19.9-22.6 x 29.31-33.7): shower, two basins, WC
+        place(c, S.shower(1.2, 1.0), 22.6, 33.7, 180)
+        place(c, S.vanity(1.6, 0.55, n=2), 22.6, 29.7, 90)
+        place(c, S.wc(), 19.9, 32.3, -90)
+        # laundry and linens (11.55-14.6 x 29.31-33.7)
+        place(c, S.washer(2), 13.4, 33.7, 180)
+        place(c, S.counter(1.6, sink=0.6), 14.6, 30.9, 90)
+        place(c, S.shelf(3.2, 0.5), 11.55, 33.0, -90)
+        # wardrobes in the bedrooms
+        place(c, S.wardrobe(3.9, 0.6), 15.6, 27.71, 180)
+        place(c, S.wardrobe(3.6, 0.6), 27.1, 27.71, 180)
+        place(c, S.wardrobe(3.35, 0.6), 23.75, 27.86, 0)
+        # mamad as a study: shelves
+        place(c, S.shelf(3.6, 0.4), 19.75, 29.6, 90)
 
 
 def furniture(c, fl):
@@ -614,7 +646,28 @@ def furniture(c, fl):
         spa(c, fixed=False)
         terrace_furniture(c)
     else:
-        pass
+        # parents' bedroom: bed head on the east wall, reading corner by the windows
+        place(c, S.bed(1.8, 2.05), 11.4, 24.6, 90)
+        for y in (23.25, 25.95):
+            place(c, S.nightstand(), 11.4, y, 90)
+        place(c, S.armchair(0.8, 0.8), 6.6, 23.2, 45)
+        place(c, S.round_table(0.3), 7.5, 22.9)
+        place(c, S.rug(2.4, 2.6), 9.2, 24.6)
+        # young child: bed, desk, play rug
+        place(c, S.bed(1.2, 2.0), 17.15, 24.1, 90)
+        place(c, S.desk(1.4, 0.65), 13.0, 22.35, 0)
+        place(c, S.rug(2.0, 2.0), 13.6, 25.6)
+        place(c, S.beanbag(0.38), 12.2, 26.6)
+        # teen 1: bed on the east wall, desk at the window
+        place(c, S.bed(1.4, 2.0), 27.2, 24.6, 90)
+        place(c, S.desk(1.6, 0.7), 23.6, 22.35, 0)
+        place(c, S.armchair(0.8, 0.8), 23.3, 25.8, 0)
+        # teen 2: bed on the east wall, desk under the north window
+        place(c, S.bed(1.4, 2.0), 27.2, 31.4, 90)
+        place(c, S.desk(1.6, 0.7), 24.0, 33.7, 180)
+        place(c, S.beanbag(0.4), 23.6, 30.4)
+        # mamad as a study
+        place(c, S.desk(1.4, 0.65), 18.5, 33.7, 180)
 
 
 # ------------------------------------------------------------------ living room (unchanged; same data as the SketchUp sheets)
@@ -731,7 +784,7 @@ def section_marks(c):
             c.text((p[0] + arrow[0] * 1.15, p[1] + arrow[1] * 1.15), letter, "TEXT", h=0.32, bold=True)
 
 
-LEVEL_AT = {"B": (20.4, 18.35), "G": (24.2, 23.0), "F": (12.6, 28.2)}
+LEVEL_AT = {"B": (20.4, 18.35), "G": (24.2, 23.0), "F": (20.5, 26.9)}
 
 
 # ------------------------------------------------------------------ floor plan

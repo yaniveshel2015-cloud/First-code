@@ -102,14 +102,19 @@ room("G", "P05", "ג׳קוזי", (45.8, 31.15, 50.7, 33.7), "עיקרי", g_spa)
 
 # ---- F, +3.50: private part. Stage 3 will lay out these zones in detail.
 g_par, g_kid, g_com = "סוויטת הורים", "חדרי ילדים", "משותף"
-room("F", "F01", "חדר שינה הורים", (5.8, 22.35, 11.4, 27.71), "עיקרי", g_par)
-room("F", "F03", "חדר ארונות ומקלחת הורים", (5.8, 27.86, 11.4, 33.7), "עיקרי", g_par)
-room("F", "F05", "חדר נוער 1", (11.55, 22.35, 17.15, 27.71), "עיקרי", g_kid)
-room("F", "F14", "חדר הילד הצעיר", (22.35, 22.35, 27.2, 27.71), "עיקרי", g_kid)
-room("F", "F11", "מסדרון ומבואת קומה", [(11.55, 27.86, 27.2, 29.16), (17.3, 26.41, 22.35, 27.86), (20.2, 24.5, 22.35, 26.41)], "שירות", g_com)
-room("F", "F08", "חדר נוער 2", (11.55, 29.31, 17.15, 33.7), "עיקרי", g_kid)
-room("F", "F13", "ממ״ד", TOWER, "שירות", g_com, note="ביום־יום חדר לימוד")
-room("F", "F12", "כביסה, מקלחות ילדים", (19.9, 29.31, 27.2, 33.7), "עיקרי", g_kid)
+room("F", "F01", "חדר שינה הורים", (5.8, 22.35, 11.4, 27.71), "עיקרי", g_par, label=(8.6, 26.6), note="מרפסת לדרום, חלון למערב")
+room("F", "F02", "חדר ארונות הורים", [(5.8, 27.86, 9.85, 29.16), (5.8, 29.16, 8.6, 33.7)], "עיקרי", g_par, label=(7.2, 31.6),
+     note="נכנסים מחדר השינה, וממנו לחדר הרחצה")
+room("F", "F04", "חדר רחצה הורים", (8.75, 29.31, 11.4, 33.7), "עיקרי", g_par, label=(9.95, 31.55), note="אמבטיה, מקלחת, כיור כפול. חלון לצפון")
+room("F", "F14", "חדר הילד הצעיר", (11.55, 22.35, 17.15, 27.71), "עיקרי", g_kid, label=(14.0, 26.3), note="ליד חדר ההורים, מרפסת משותפת עם מחיצה")
+room("F", "F15", "חדר רחצה ילד", (14.75, 29.31, 17.15, 33.7), "עיקרי", g_kid, label=(16.05, 30.45), note="מול חדר הילד, אמבטיה. חלון לצפון")
+room("F", "F05", "חדר נוער 1", (22.35, 22.35, 27.2, 27.71), "עיקרי", g_kid, label=(24.9, 26.4), note="מרפסת לדרום")
+room("F", "F08", "חדר נוער 2", (22.75, 27.86, 27.2, 33.7), "עיקרי", g_kid, label=(24.9, 30.4), note="חלון לצפון וחלון עליון למזרח, מעל גג הסלון")
+room("F", "F06", "מקלחת נוער", (19.9, 29.31, 22.6, 33.7), "עיקרי", g_kid, label=(21.0, 31.2), note="משותפת לשני חדרי הנוער, 2 כיורים. חלון לצפון")
+room("F", "F12", "חדר כביסה ומצעים", (11.55, 29.31, 14.6, 33.7), "שירות", g_com, label=(13.05, 30.75), note="חלון לצפון")
+room("F", "F11", "מסדרון ומבואת קומה", [(10.0, 27.86, 22.6, 29.16), (17.3, 26.41, 22.2, 27.86), (20.2, 24.5, 22.2, 26.41)], "שירות", g_com,
+     label=(14.8, 28.5))
+room("F", "F13", "ממ״ד", TOWER, "שירות", g_com, label=(18.5, 31.2), note="ביום־יום חדר לימוד")
 room("F", "F16", "מדרגות", STAIR_RECT, "שירות", g_core)
 room("F", "F17", "מעלית", ELEV_RECT, "שירות", g_core)
 
@@ -211,28 +216,36 @@ Vv("G", 29.0, 30.5, 50.7, 51.0, "win", sill=1.7, head=2.4)
 H("G", 46.6, 49.9, *NF, "win", sill=1.2, head=2.5)
 
 # ---- F (zones; stage 3)
-H("F", 6.1, 11.1, *SF, "slide", head=2.6)
-H("F", 12.0, 16.7, *SF, "slide", head=2.6)
-H("F", 22.8, 26.8, *SF, "slide", head=2.6)
-Vv("F", 23.0, 27.0, *WF, "win", sill=0.9, head=2.6)
-Vv("F", 28.5, 33.0, *WF, "win", sill=1.2, head=2.4)
-H("F", 12.2, 16.5, *NF, "win", sill=0.9, head=2.6)
-H("F", 17.95, 19.05, *NF, "win", sill=1.2, head=2.2, blast=True)
-H("F", 20.5, 26.6, *NF, "win", sill=1.2, head=2.4)
-Vv("F", 28.0, 29.0, 11.4, 11.55, "door", hinge="a", swing=-1)                     # parents' wing
-H("F", 12.2, 13.1, 27.71, 27.86, "door", hinge="a", swing=-1)                     # teen 1
-H("F", 23.0, 23.9, 27.71, 27.86, "door", hinge="a", swing=-1)                     # young child
-H("F", 12.2, 13.1, 29.16, 29.31, "door", hinge="a", swing=1)                      # teen 2
-H("F", 18.05, 18.95, 29.16, 29.31, "door", hinge="a", swing=1, blast=True)        # mamad
-H("F", 21.0, 21.9, 29.16, 29.31, "door", hinge="a", swing=1)                      # laundry and showers
-H("F", 7.8, 8.7, 27.71, 27.86, "door", hinge="a", swing=1)                        # bedroom -> closet and bath
+H("F", 6.1, 11.1, *SF, "slide", head=2.6)                                         # parents -> balcony
+H("F", 12.0, 16.7, *SF, "slide", head=2.6)                                        # young child -> balcony
+H("F", 22.8, 26.8, *SF, "slide", head=2.6)                                        # teen 1 -> balcony
+H("F", 17.55, 19.8, *SF, "fixed", head=2.7)                                       # stair window
+Vv("F", 23.0, 27.0, *WF, "win", sill=0.9, head=2.6)                               # parents, west
+Vv("F", 28.0, 29.0, *WF, "win", sill=1.0, head=2.4)                               # parents' closet
+H("F", 9.3, 10.9, *NF, "win", sill=1.4, head=2.4)                                 # parents' bath
+H("F", 12.0, 14.1, *NF, "win", sill=1.1, head=2.4)                                # laundry
+H("F", 15.25, 16.65, *NF, "win", sill=1.4, head=2.4)                              # child's bath
+H("F", 17.95, 19.05, *NF, "win", sill=1.2, head=2.2, blast=True)                  # mamad
+H("F", 20.5, 22.0, *NF, "win", sill=1.4, head=2.4)                                # teen shower room
+H("F", 23.4, 26.6, *NF, "win", sill=0.9, head=2.6)                                # teen 2
+Vv("F", 28.6, 32.8, *EF, "win", sill=2.05, head=2.7)                              # teen 2, high window over the living room roof
+H("F", 10.25, 11.15, 27.71, 27.86, "door", hinge="b", swing=-1)                  # corridor -> parents' bedroom
+H("F", 6.5, 7.4, 27.71, 27.86, "door", hinge="a", swing=1)                       # bedroom -> closet
+Vv("F", 30.2, 31.1, 8.6, 8.75, "door", hinge="a", swing=1)                       # closet -> bath
+H("F", 15.8, 16.7, 27.71, 27.86, "door", hinge="b", swing=-1)                    # corridor -> young child
+H("F", 15.25, 16.15, 29.16, 29.31, "door", hinge="a", swing=1)                   # corridor -> child's bath
+H("F", 12.4, 13.3, 29.16, 29.31, "door", hinge="a", swing=1)                     # corridor -> laundry
+H("F", 18.05, 18.95, 29.16, 29.31, "door", hinge="a", swing=-1, blast=True)       # corridor -> mamad
+H("F", 20.6, 21.5, 29.16, 29.31, "door", hinge="a", swing=1)                     # corridor -> teen shower room
+Vv("F", 26.6, 27.5, 22.2, 22.35, "door", hinge="b", swing=1)                     # lobby -> teen 1
+Vv("F", 27.95, 28.85, 22.6, 22.75, "door", hinge="a", swing=1)                   # corridor -> teen 2
 
 # ------------------------------------------------------------------ site elements
 POOL = (39.5, 21.5, 43.5, 33.5)
 POOL_DECK = (36.0, 20.5, 45.5, 34.0)
 TERRACE = (5.5, 12.2, 27.5, 22.05)
 TERRACE_GATE = (22.6, 24.0)
-BALCONIES = [(5.8, 20.25, 16.2, 22.05), (22.15, 20.25, 27.2, 22.05)]
+BALCONIES = [(5.8, 20.25, 17.15, 22.05), (22.35, 20.25, 27.2, 22.05)]
 EXT_STAIR = dict(x0=16.9, x1=22.6, y0=10.7, y1=12.2, n=19, tread=0.30, risers=20, z0=-3.50, z1=0.0)
 EXT_LANDING = (22.6, 10.7, 24.0, 12.2)
 ENGLISH_COURT = (5.5, 34.0, 27.5, 36.6)                 # sunken court along the whole north facade, at -3.50
@@ -414,7 +427,7 @@ def circulation_share(fl):
     return circ / net if net else 0.0
 
 
-WET_WORDS = ("שירותים", "מקלחת", "מקלחות")
+WET_WORDS = ("שירותים", "מקלחת", "מקלחות", "רחצה", "כביסה")
 SHELTER_ID, SHELTER_MIN_AREA = "B14", 25.0
 
 
