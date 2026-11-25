@@ -23,10 +23,8 @@ subprocess.run([PY, os.path.join(HERE, "sheets.py"), os.path.join(HERE, "out", "
 subprocess.run(["node", os.path.join(HERE, "shoot.js"), os.path.join(HERE, "out", "sheets.html"), os.path.join(HERE, "out")], check=True, cwd=HERE)
 
 if os.path.isdir(DEL):
-    for root, dirs, files in os.walk(DEL):
-        for fn in files:
-            os.unlink(os.path.join(root, fn))
-dirs = {k: os.path.join(DEL, k) for k in ("01-drawings-pdf", "01-drawings-pdf/png", "02-autocad-dxf", "03-revit-ifc", "04-3d", "04-3d/renders", "05-program",
+    shutil.rmtree(DEL)
+dirs = {k: os.path.join(DEL, k) for k in ("01-drawings-pdf", "01-drawings-pdf/png", "02-autocad-dxf", "03-revit", "04-3d", "04-3d/renders", "05-program",
                                            "06-sketchup-living-room")}
 for d in dirs.values():
     os.makedirs(d, exist_ok=True)
@@ -39,7 +37,11 @@ for i, n in enumerate(names, start=1):
 for fn in sorted(os.listdir(os.path.join(out, "cad"))):
     if fn.endswith(".dxf"):
         shutil.copy(os.path.join(out, "cad", fn), dirs["02-autocad-dxf"])
-shutil.copy(os.path.join(out, "deliver", "villa84.ifc"), dirs["03-revit-ifc"])
+shutil.copy(os.path.join(out, "deliver", "villa84.ifc"), dirs["03-revit"])
+for fn in ("villa84.dyn", "villa84-revit-data.json"):
+    shutil.copy(os.path.join(out, "revit", fn), dirs["03-revit"])
+shutil.copy(os.path.join(HERE, "revit", "villa84_build.py"), dirs["03-revit"])
+shutil.copy(os.path.join(HERE, "README-revit-he.txt"), dirs["03-revit"])
 for fn in sorted(os.listdir(os.path.join(out, "deliver"))):
     if fn.endswith(".glb"):
         shutil.copy(os.path.join(out, "deliver", fn), dirs["04-3d"])
